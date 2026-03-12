@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Flame, Plus, Trash2, CheckCircle2, Circle } from 'lucide-react';
 
 function Habits() {
   const [habits, setHabits] = useState([]);
@@ -16,7 +17,6 @@ function Habits() {
       name: newHabit,
       streak: 0,
       lastChecked: null,
-      completedToday: false,
     };
     const updated = [...habits, habit];
     setHabits(updated);
@@ -29,12 +29,7 @@ function Habits() {
     const updated = habits.map(h => {
       if (h.id !== id) return h;
       if (h.lastChecked === today) return h;
-      return {
-        ...h,
-        streak: h.streak + 1,
-        lastChecked: today,
-        completedToday: true,
-      };
+      return { ...h, streak: h.streak + 1, lastChecked: today };
     });
     setHabits(updated);
     localStorage.setItem('habits', JSON.stringify(updated));
@@ -47,27 +42,58 @@ function Habits() {
   };
 
   const today = new Date().toDateString();
+  const completedToday = habits.filter(h => h.lastChecked === today).length;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-orange-400 mb-6 tracking-wide">🔥 Habits Tracker</h2>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
+          <Flame size={24} className="text-orange-500" strokeWidth={1.5} />
+        </div>
+        <div>
+          <h2 className="text-2xl font-black text-gray-900">Habits Tracker</h2>
+          <p className="text-gray-400 text-sm">{completedToday}/{habits.length} completed today</p>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      {habits.length > 0 && (
+        <div className="bg-white rounded-2xl p-5 mb-6 shadow-sm border border-gray-100">
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm font-semibold text-gray-600">Today's Progress</p>
+            <p className="text-sm font-bold text-orange-500">{Math.round((completedToday / habits.length) * 100)}%</p>
+          </div>
+          <div className="w-full bg-gray-100 rounded-full h-3">
+            <div
+              className="bg-gradient-to-r from-orange-400 to-pink-400 h-3 rounded-full transition-all duration-500"
+              style={{ width: `${(completedToday / habits.length) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Add Habit */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-8">
+      <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
+        <h3 className="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wide">Add New Habit</h3>
         <div className="flex gap-4">
-          <input
-            type="text"
-            placeholder="New habit (e.g. Read 30 mins)"
-            value={newHabit}
-            onChange={e => setNewHabit(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && addHabit()}
-            className="flex-1 bg-gray-800 text-white placeholder-gray-600 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-orange-500"
-          />
+          <div className="relative flex-1">
+            <Flame size={16} className="absolute left-3 top-3.5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="New habit (e.g. Read 30 mins)"
+              value={newHabit}
+              onChange={e => setNewHabit(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addHabit()}
+              className="w-full bg-gray-50 text-gray-800 placeholder-gray-400 border border-gray-200 rounded-xl pl-9 pr-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:bg-white transition-all"
+            />
+          </div>
           <button
             onClick={addHabit}
-            className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 py-3 rounded-lg transition-all tracking-wide"
+            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all"
           >
-            + ADD
+            <Plus size={16} />
+            Add
           </button>
         </div>
       </div>
@@ -75,34 +101,41 @@ function Habits() {
       {/* Habits List */}
       <div className="space-y-3">
         {habits.length === 0 && (
-          <p className="text-gray-600 text-center py-10">No habits yet. Build your routine! 🔥</p>
+          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
+            <Flame size={40} className="text-gray-200 mx-auto mb-3" />
+            <p className="text-gray-400 font-medium">No habits yet. Build your routine!</p>
+          </div>
         )}
         {habits.map(habit => {
           const doneToday = habit.lastChecked === today;
           return (
-            <div key={habit.id} className={`bg-gray-900 border rounded-lg px-5 py-4 flex items-center justify-between transition-all ${doneToday ? 'border-orange-500' : 'border-gray-800'}`}>
+            <div
+              key={habit.id}
+              className={`bg-white rounded-2xl px-6 py-4 flex items-center justify-between shadow-sm border transition-all
+                ${doneToday ? 'border-orange-200 bg-orange-50' : 'border-gray-100 hover:border-orange-200'}`}
+            >
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => toggleHabit(habit.id)}
-                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all font-bold
-                    ${doneToday
-                      ? 'bg-orange-500 border-orange-500 text-white'
-                      : 'border-gray-600 text-transparent hover:border-orange-400'}`}
-                >
-                  ✓
+                <button onClick={() => toggleHabit(habit.id)}>
+                  {doneToday
+                    ? <CheckCircle2 size={24} className="text-orange-500" />
+                    : <Circle size={24} className="text-gray-300 hover:text-orange-400 transition-all" />
+                  }
                 </button>
                 <div>
-                  <p className={`font-semibold ${doneToday ? 'text-orange-400' : 'text-white'}`}>
+                  <p className={`font-bold ${doneToday ? 'text-orange-600' : 'text-gray-800'}`}>
                     {habit.name}
                   </p>
-                  <p className="text-gray-500 text-sm">🔥 {habit.streak} day streak</p>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <Flame size={12} className="text-orange-400" />
+                    <p className="text-gray-400 text-xs">{habit.streak} day streak</p>
+                  </div>
                 </div>
               </div>
               <button
                 onClick={() => deleteHabit(habit.id)}
-                className="text-gray-700 hover:text-red-500 transition-all text-xl ml-4"
+                className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-red-50 text-gray-300 hover:text-red-400 transition-all"
               >
-                ✕
+                <Trash2 size={16} />
               </button>
             </div>
           );
