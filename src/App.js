@@ -9,6 +9,7 @@ import Coding from './Coding';
 import Studies from './Studies';
 import Habits from './Habits';
 import Fitness from './Fitness';
+import AICoach from './AICoach';
 import { Home, Code2, BookOpen, Flame, Dumbbell, LogOut } from 'lucide-react';
 
 const slideVariants = {
@@ -77,12 +78,8 @@ function App() {
           style={{ position: 'fixed', width: '100%', height: '100%' }}
         >
           {screen === 'splash' && <Splash onDone={handleSplashDone} />}
-          {screen === 'login' && (
-            <Login onLogin={handleLogin} onSwitchToSignup={() => setScreen('signup')} />
-          )}
-          {screen === 'signup' && (
-            <Signup onSignup={handleSignup} onSwitchToLogin={() => setScreen('login')} />
-          )}
+          {screen === 'login' && <Login onLogin={handleLogin} onSwitchToSignup={() => setScreen('signup')} />}
+          {screen === 'signup' && <Signup onSignup={handleSignup} onSwitchToLogin={() => setScreen('login')} />}
         </motion.div>
       </AnimatePresence>
     );
@@ -161,6 +158,9 @@ function App() {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* AI Coach */}
+      <AICoach currentUser={currentUser} />
     </motion.div>
   );
 }
