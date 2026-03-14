@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Code2, BookOpen, Flame, Dumbbell, TrendingUp, Target } from 'lucide-react';
+import Heatmap from './Heatmap';
 
-function Dashboard({ setActiveTab }) {
+function Dashboard({ setActiveTab, currentUser }) {
   const [activeDay, setActiveDay] = useState('Weekly');
 
   const stats = [
@@ -24,7 +25,6 @@ function Dashboard({ setActiveTab }) {
     <div>
       {/* Top Row */}
       <div className="flex gap-6 mb-6">
-
         {/* Hero Banner */}
         <div className="flex-1 bg-gradient-to-br from-pink-300 to-purple-400 rounded-3xl p-8 flex items-center justify-between shadow-sm">
           <div>
@@ -122,12 +122,15 @@ function Dashboard({ setActiveTab }) {
       </div>
 
       {/* Motivation Quote */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center mb-6">
         <p className="text-gray-700 font-semibold text-lg">
           "Push yourself, because no one else is going to do it for you."
         </p>
         <p className="text-gray-400 text-sm mt-1">— Unknown</p>
       </div>
+
+      {/* Heatmap */}
+      <Heatmap />
     </div>
   );
 }
