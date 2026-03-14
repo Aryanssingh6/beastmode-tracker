@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Sparkles, Send, X } from 'lucide-react';
-
-const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_KEY);
 
 function AICoach({ currentUser }) {
   const [open, setOpen] = useState(false);
@@ -19,7 +16,8 @@ function AICoach({ currentUser }) {
   };
 
   const sendMessage = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() || loading) return;
+
     const userMsg = message;
     setMessage('');
     setChat(prev => [...prev, { role: 'user', text: userMsg }]);
@@ -27,24 +25,58 @@ function AICoach({ currentUser }) {
 
     try {
       const data = getUserData();
+
       const prompt = `You are BeastMode AI Coach for ${currentUser?.name || 'the user'}.
 User's data:
 - Coding sessions: ${data.coding.length}
 - Study sessions: ${data.studies.length}
 - Habits: ${data.habits.length}
 - Fitness workouts: ${data.fitness.length}
+
 Be motivating, concise and give actionable advice. Keep responses short and punchy.
+
 User says: ${userMsg}`;
 
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const response = await fetch(
+  `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${process.env.REACT_APP_GEMINI_KEY}`,
+  {
+    method: "POST",
+    
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [{ text: prompt }]
+              }
+            ],
+            generationConfig: {
+              maxOutputTokens: 500,
+              temperature: 0.8
+            }
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error?.message || "API Error");
+      }
+
+      const text = result.candidates[0].content.parts[0].text;
+
       setChat(prev => [...prev, { role: 'ai', text }]);
+
     } catch (err) {
-      console.error(err);
-      setChat(prev => [...prev, { role: 'ai', text: 'Something went wrong. Try again!' }]);
+      console.error("Gemini Error:", err);
+      setChat(prev => [
+        ...prev,
+        { role: 'ai', text: `⚠️ ${err.message}` }
+      ]);
     }
+
     setLoading(false);
   };
 
@@ -64,6 +96,7 @@ User says: ${userMsg}`;
           className="fixed bottom-24 right-6 w-96 bg-white rounded-3xl shadow-2xl border border-gray-100 flex flex-col z-50 overflow-hidden"
           style={{ height: '480px' }}
         >
+
           {/* Header */}
           <div className="bg-gradient-to-r from-purple-500 to-pink-400 px-5 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -84,24 +117,28 @@ User says: ${userMsg}`;
                 <p className="text-gray-400 text-sm">Ask me anything about your progress!</p>
               </div>
             )}
+
             {chat.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-xs px-4 py-3 rounded-2xl text-sm ${
-                  msg.role === 'user'
-                    ? 'bg-gray-900 text-white rounded-br-sm'
-                    : 'bg-purple-50 text-gray-800 rounded-bl-sm'
-                }`}>
+                <div
+                  className={`max-w-xs px-4 py-3 rounded-2xl text-sm ${
+                    msg.role === 'user'
+                      ? 'bg-gray-900 text-white rounded-br-sm'
+                      : 'bg-purple-50 text-gray-800 rounded-bl-sm'
+                  }`}
+                >
                   {msg.text}
                 </div>
               </div>
             ))}
+
             {loading && (
               <div className="flex justify-start">
                 <div className="bg-purple-50 px-4 py-3 rounded-2xl rounded-bl-sm">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-150" />
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-300" />
                   </div>
                 </div>
               </div>
@@ -118,6 +155,7 @@ User says: ${userMsg}`;
               onKeyDown={e => e.key === 'Enter' && sendMessage()}
               className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-400 transition-all"
             />
+
             <button
               onClick={sendMessage}
               className="w-10 h-10 bg-gray-900 hover:bg-purple-600 rounded-xl flex items-center justify-center transition-all"
@@ -125,6 +163,7 @@ User says: ${userMsg}`;
               <Send size={16} className="text-white" />
             </button>
           </div>
+
         </div>
       )}
     </>
