@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Zap, Mail, Lock, Eye, EyeOff, User, ArrowRight } from 'lucide-react';
+import { auth } from './firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 function Signup({ onSignup, onSwitchToLogin }) {
   const [name, setName] = useState('');
@@ -7,8 +9,9 @@ function Signup({ onSignup, onSwitchToLogin }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!name || !email || !password) {
       setError('Please fill in all fields');
       return;
@@ -17,17 +20,25 @@ function Signup({ onSignup, onSwitchToLogin }) {
       setError('Password must be at least 6 characters');
       return;
     }
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const exists = users.find(u => u.email === email);
-    if (exists) {
-      setError('Email already registered');
-      return;
+    setLoading(true);
+    setError('');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: name });
+      const user = {
+        id: userCredential.user.uid,
+        name,
+        email,
+      };
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      onSignup(user);
+    } catch (err) {
+      if (err.code === 'auth/email-already-in-use') setError('Email already registered');
+      else if (err.code === 'auth/weak-password') setError('Password too weak');
+      else if (err.code === 'auth/invalid-email') setError('Invalid email address');
+      else setError('Something went wrong. Try again!');
     }
-    const newUser = { id: Date.now(), name, email, password };
-    const updated = [...users, newUser];
-    localStorage.setItem('users', JSON.stringify(updated));
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    onSignup(newUser);
+    setLoading(false);
   };
 
   return (
@@ -37,8 +48,8 @@ function Signup({ onSignup, onSwitchToLogin }) {
         <div className="w-28 h-28 bg-white bg-opacity-10 rounded-3xl flex items-center justify-center shadow-2xl">
           <Zap size={64} className="text-white" strokeWidth={1.5} />
         </div>
-        <h2 className="text-5xl font-black text-white tracking-tight">
-          Beast<span className="text-purple-400">Mode</span>
+        <h2 className="text-5xl font-black italic bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
+          BeastMode
         </h2>
         <p className="text-gray-500 text-lg tracking-widest uppercase">
           Level Up Every Day
@@ -48,8 +59,8 @@ function Signup({ onSignup, onSwitchToLogin }) {
       {/* Right Side */}
       <div className="flex-1 flex flex-col justify-center px-16 py-12">
         <div className="mb-10">
-          <h1 className="text-3xl font-black text-gray-900">
-            Beast<span className="text-purple-500">Mode</span>
+          <h1 className="text-3xl font-black italic bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+            BeastMode
           </h1>
         </div>
 
@@ -104,10 +115,11 @@ function Signup({ onSignup, onSwitchToLogin }) {
 
         <button
           onClick={handleSignup}
-          className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-purple-600 text-white font-bold py-4 rounded-xl text-sm transition-all duration-300 shadow-lg mb-6"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-purple-600 text-white font-bold py-4 rounded-xl text-sm transition-all duration-300 shadow-lg mb-6 disabled:opacity-50"
         >
-          Create Account
-          <ArrowRight size={16} />
+          {loading ? 'Creating account...' : 'Create Account'}
+          {!loading && <ArrowRight size={16} />}
         </button>
 
         <p className="text-center text-gray-400 text-sm">

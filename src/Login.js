@@ -1,25 +1,38 @@
 import React, { useState } from 'react';
 import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { auth } from './firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login({ onLogin, onSwitchToSignup }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
-    if (!user) {
-      setError('Invalid email or password');
-      return;
+    setLoading(true);
+    setError('');
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = {
+        id: userCredential.user.uid,
+        name: userCredential.user.displayName || email.split('@')[0],
+        email: userCredential.user.email,
+      };
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      onLogin(user);
+    } catch (err) {
+      if (err.code === 'auth/user-not-found') setError('No account found with this email');
+      else if (err.code === 'auth/wrong-password') setError('Wrong password');
+      else if (err.code === 'auth/invalid-credential') setError('Invalid email or password');
+      else setError('Something went wrong. Try again!');
     }
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    onLogin(user);
+    setLoading(false);
   };
 
   return (
@@ -29,8 +42,8 @@ function Login({ onLogin, onSwitchToSignup }) {
         <div className="w-28 h-28 bg-white bg-opacity-10 rounded-3xl flex items-center justify-center shadow-2xl">
           <Zap size={64} className="text-white" strokeWidth={1.5} />
         </div>
-        <h2 className="text-5xl font-black text-white tracking-tight">
-          Beast<span className="text-purple-400">Mode</span>
+        <h2 className="text-5xl font-black italic bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent tracking-tight">
+          BeastMode
         </h2>
         <p className="text-gray-500 text-lg tracking-widest uppercase">
           Level Up Every Day
@@ -40,8 +53,8 @@ function Login({ onLogin, onSwitchToSignup }) {
       {/* Right Side */}
       <div className="flex-1 flex flex-col justify-center px-16 py-12">
         <div className="mb-10">
-          <h1 className="text-3xl font-black text-gray-900">
-            Beast<span className="text-purple-500">Mode</span>
+          <h1 className="text-3xl font-black italic bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+            BeastMode
           </h1>
         </div>
 
@@ -86,10 +99,11 @@ function Login({ onLogin, onSwitchToSignup }) {
 
         <button
           onClick={handleLogin}
-          className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-purple-600 text-white font-bold py-4 rounded-xl text-sm transition-all duration-300 shadow-lg mb-6"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-purple-600 text-white font-bold py-4 rounded-xl text-sm transition-all duration-300 shadow-lg mb-6 disabled:opacity-50"
         >
-          Login
-          <ArrowRight size={16} />
+          {loading ? 'Logging in...' : 'Login'}
+          {!loading && <ArrowRight size={16} />}
         </button>
 
         <p className="text-center text-gray-400 text-sm">

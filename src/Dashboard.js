@@ -1,9 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Code2, BookOpen, Flame, Dumbbell, TrendingUp, Target } from 'lucide-react';
 import Heatmap from './Heatmap';
 
+const quotes = [
+  { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
+  { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
+  { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+  { text: "Wake up with determination. Go to bed with satisfaction.", author: "Unknown" },
+  { text: "Dream it. Wish it. Do it.", author: "Unknown" },
+  { text: "Little things make big days.", author: "Unknown" },
+  { text: "Your limitation — it's only your imagination.", author: "Unknown" },
+  { text: "Great things never come from comfort zones.", author: "Unknown" },
+];
+
 function Dashboard({ setActiveTab, currentUser }) {
   const [activeDay, setActiveDay] = useState('Weekly');
+  const [quote, setQuote] = useState(quotes[0]);
+  const [greeting, setGreeting] = useState('');
+  const [todaySummary, setTodaySummary] = useState({});
+
+  useEffect(() => {
+    // Random quote
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    setQuote(randomQuote);
+
+    // Greeting based on time
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Good Morning');
+    else if (hour < 17) setGreeting('Good Afternoon');
+    else if (hour < 21) setGreeting('Good Evening');
+    else setGreeting('Good Night');
+
+    // Today's summary
+    const today = new Date().toLocaleDateString();
+    const coding = JSON.parse(localStorage.getItem('coding') || '[]').filter(e => e.date === today).length;
+    const studies = JSON.parse(localStorage.getItem('studies') || '[]').filter(e => e.date === today).length;
+    const fitness = JSON.parse(localStorage.getItem('fitness') || '[]').filter(e => e.date === today).length;
+    const habits = JSON.parse(localStorage.getItem('habits') || '[]').filter(h => h.lastChecked === new Date().toDateString()).length;
+    setTodaySummary({ coding, studies, fitness, habits });
+  }, []);
 
   const stats = [
     { label: 'Coding', key: 'coding', icon: Code2, color: 'bg-purple-100', textColor: 'text-purple-500', iconColor: 'text-purple-400' },
@@ -12,17 +49,53 @@ function Dashboard({ setActiveTab, currentUser }) {
     { label: 'Fitness', key: 'fitness', icon: Dumbbell, color: 'bg-green-100', textColor: 'text-green-500', iconColor: 'text-green-400' },
   ];
 
-  const getCount = (key) => {
-    return JSON.parse(localStorage.getItem(key) || '[]').length;
-  };
+  const getCount = (key) => JSON.parse(localStorage.getItem(key) || '[]').length;
 
   const totalEntries = stats.reduce((acc, s) => acc + getCount(s.key), 0);
   const overallProgress = Math.min(Math.round((totalEntries / 20) * 100), 100);
   const circumference = 2 * Math.PI * 54;
   const strokeDash = (overallProgress / 100) * circumference;
 
+  const totalToday = Object.values(todaySummary).reduce((a, b) => a + b, 0);
+
   return (
     <div>
+      {/* Greeting */}
+      <div className="mb-6">
+        <h2 className="text-3xl font-black text-gray-900">
+          {greeting}, {currentUser?.name?.split(' ')[0]}! 👋
+        </h2>
+        <p className="text-gray-400 mt-1">
+          {totalToday === 0
+            ? "You haven't logged anything today. Let's get started! 💪"
+            : `You've logged ${totalToday} activities today. Keep it up! 🔥`}
+        </p>
+      </div>
+
+      {/* Today's Summary */}
+      {totalToday > 0 && (
+        <div className="bg-gradient-to-r from-purple-500 to-pink-400 rounded-2xl p-5 mb-6 shadow-sm">
+          <p className="text-white font-bold mb-3 text-sm uppercase tracking-wide">Today's Activity</p>
+          <div className="grid grid-cols-4 gap-3">
+            {[
+              { label: 'Coding', value: todaySummary.coding, icon: Code2 },
+              { label: 'Studies', value: todaySummary.studies, icon: BookOpen },
+              { label: 'Habits', value: todaySummary.habits, icon: Flame },
+              { label: 'Fitness', value: todaySummary.fitness, icon: Dumbbell },
+            ].map(item => {
+              const Icon = item.icon;
+              return (
+                <div key={item.label} className="bg-white bg-opacity-20 rounded-xl p-3 text-center">
+                  <Icon size={16} className="text-white mx-auto mb-1" />
+                  <p className="text-white font-black text-xl">{item.value}</p>
+                  <p className="text-purple-100 text-xs">{item.label}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Top Row */}
       <div className="flex gap-6 mb-6">
         {/* Hero Banner */}
@@ -52,8 +125,6 @@ function Dashboard({ setActiveTab, currentUser }) {
             <Target size={16} className="text-gray-400" />
             <p className="text-white font-semibold text-sm">Statistics</p>
           </div>
-
-          {/* Circular Progress */}
           <div className="relative w-36 h-36 mb-4">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="54" fill="none" stroke="#374151" strokeWidth="10" />
@@ -69,8 +140,6 @@ function Dashboard({ setActiveTab, currentUser }) {
               <span className="text-gray-400 text-xs">Overall</span>
             </div>
           </div>
-
-          {/* Mini Stats */}
           <div className="flex gap-4 w-full justify-around">
             <div className="text-center">
               <p className="text-white font-bold text-lg">{totalEntries}</p>
@@ -121,12 +190,10 @@ function Dashboard({ setActiveTab, currentUser }) {
         })}
       </div>
 
-      {/* Motivation Quote */}
+      {/* Motivational Quote */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center mb-6">
-        <p className="text-gray-700 font-semibold text-lg">
-          "Push yourself, because no one else is going to do it for you."
-        </p>
-        <p className="text-gray-400 text-sm mt-1">— Unknown</p>
+        <p className="text-gray-700 font-semibold text-lg">"{quote.text}"</p>
+        <p className="text-gray-400 text-sm mt-2">— {quote.author}</p>
       </div>
 
       {/* Heatmap */}

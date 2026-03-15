@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Plus, Trash2, CheckCircle2, Circle } from 'lucide-react';
+import { saveData, getData } from './firestore';
 
-function Habits() {
+function Habits({ currentUser }) {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('habits') || '[]');
-    setHabits(saved);
-  }, []);
+    if (currentUser?.id) loadData();
+  }, [currentUser]);
 
-  const addHabit = () => {
+  const loadData = async () => {
+    setLoading(true);
+    const data = await getData(currentUser.id, 'habits');
+    setHabits(data);
+    setLoading(false);
+  };
+
+  const addHabit = async () => {
     if (!newHabit) return;
     const habit = {
       id: Date.now(),
@@ -20,11 +28,11 @@ function Habits() {
     };
     const updated = [...habits, habit];
     setHabits(updated);
-    localStorage.setItem('habits', JSON.stringify(updated));
+    await saveData(currentUser.id, 'habits', updated);
     setNewHabit('');
   };
 
-  const toggleHabit = (id) => {
+  const toggleHabit = async (id) => {
     const today = new Date().toDateString();
     const updated = habits.map(h => {
       if (h.id !== id) return h;
@@ -32,21 +40,21 @@ function Habits() {
       return { ...h, streak: h.streak + 1, lastChecked: today };
     });
     setHabits(updated);
-    localStorage.setItem('habits', JSON.stringify(updated));
+    await saveData(currentUser.id, 'habits', updated);
   };
 
-  const deleteHabit = (id) => {
+  const deleteHabit = async (id) => {
     const updated = habits.filter(h => h.id !== id);
     setHabits(updated);
-    localStorage.setItem('habits', JSON.stringify(updated));
+    await saveData(currentUser.id, 'habits', updated);
   };
 
   const today = new Date().toDateString();
   const completedToday = habits.filter(h => h.lastChecked === today).length;
+  const longestStreak = habits.reduce((max, h) => h.streak > max ? h.streak : max, 0);
 
   return (
     <div>
-      {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center">
           <Flame size={24} className="text-orange-500" strokeWidth={1.5} />
@@ -57,12 +65,40 @@ function Habits() {
         </div>
       </div>
 
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div className="flex items-center gap-2 mb-2">
+            <Flame size={16} className="text-orange-400" />
+            <p className="font-bold text-gray-700 text-sm">Today</p>
+          </div>
+          <p className="text-3xl font-black text-gray-900">
+            {completedToday}
+            <span className="text-gray-400 text-lg font-semibold">/{habits.length}</span>
+          </p>
+          <p className="text-gray-400 text-xs mt-1">habits completed</p>
+        </div>
+        <div className="bg-gray-900 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <Flame size={16} className="text-orange-400" />
+            <p className="font-bold text-white text-sm">Longest Streak</p>
+          </div>
+          <p className="text-3xl font-black text-white">
+            {longestStreak}
+            <span className="text-gray-400 text-lg font-semibold"> days</span>
+          </p>
+          <p className="text-gray-500 text-xs mt-1">{longestStreak >= 7 ? '🔥 Amazing!' : 'Keep going!'}</p>
+        </div>
+      </div>
+
       {/* Progress Bar */}
       {habits.length > 0 && (
         <div className="bg-white rounded-2xl p-5 mb-6 shadow-sm border border-gray-100">
           <div className="flex justify-between items-center mb-2">
             <p className="text-sm font-semibold text-gray-600">Today's Progress</p>
-            <p className="text-sm font-bold text-orange-500">{Math.round((completedToday / habits.length) * 100)}%</p>
+            <p className="text-sm font-bold text-orange-500">
+              {Math.round((completedToday / habits.length) * 100)}%
+            </p>
           </div>
           <div className="w-full bg-gray-100 rounded-full h-3">
             <div
@@ -90,7 +126,7 @@ function Habits() {
           </div>
           <button
             onClick={addHabit}
-            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all"
+            className="flex items-center gap-2 bg-gray-900 hover:bg-orange-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all"
           >
             <Plus size={16} />
             Add
@@ -100,7 +136,12 @@ function Habits() {
 
       {/* Habits List */}
       <div className="space-y-3">
-        {habits.length === 0 && (
+        {loading && (
+          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
+            <p className="text-gray-400 font-medium">Loading...</p>
+          </div>
+        )}
+        {!loading && habits.length === 0 && (
           <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
             <Flame size={40} className="text-gray-200 mx-auto mb-3" />
             <p className="text-gray-400 font-medium">No habits yet. Build your routine!</p>
