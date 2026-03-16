@@ -1,56 +1,46 @@
-import { db, auth } from "./firebase";
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  getDocs, 
-  query, 
-  orderBy 
-} from "firebase/firestore";
+import { db } from './firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-// Log Save karne ke liye
-export const saveLog = async (category, data) => {
+export const saveData = async (userId, key, data) => {
+  if (!userId) return;
   try {
-    const user = auth.currentUser;
-    if (!user) throw new Error("User not authenticated");
-
-    const userDocRef = doc(db, "users", user.uid);
-    const categoryRef = collection(userDocRef, category);
-
-    await addDoc(categoryRef, {
-      ...data,
-      createdAt: new Date().toISOString()
-    });
-    return true;
-  } catch (error) {
-    console.error("Save error:", error);
-    return false;
+    await setDoc(doc(db, 'users', userId, key, 'data'), { items: data });
+  } catch (err) {
+    console.error('Save error:', err);
   }
 };
 
-// Logs Get karne ke liye
-export const getLogs = async (category) => {
+export const getData = async (userId, key) => {
+  if (!userId) return [];
   try {
-    const user = auth.currentUser;
-    if (!user) return [];
-
-    const userDocRef = doc(db, "users", user.uid);
-    const categoryRef = collection(userDocRef, category);
-    
-    const q = query(categoryRef, orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-  } catch (error) {
-    console.error("Get error:", error);
+    const docSnap = await getDoc(doc(db, 'users', userId, key, 'data'));
+    if (docSnap.exists()) {
+      return docSnap.data().items || [];
+    }
+    return [];
+  } catch (err) {
+    console.error('Get error:', err);
     return [];
   }
 };
 
-// --- FIX FOR YOUR ERRORS ---
-// Hum purane naamo ko naye functions se map kar dete hain
-export const saveData = saveLog;
-export const getData = getLogs;
+export const saveValue = async (userId, key, value) => {
+  if (!userId) return;
+  try {
+    await setDoc(doc(db, 'users', userId, 'settings', key), { value });
+  } catch (err) {
+    console.error('Save value error:', err);
+  }
+};
+
+export const getValue = async (userId, key) => {
+  if (!userId) return null;
+  try {
+    const docSnap = await getDoc(doc(db, 'users', userId, 'settings', key));
+    if (docSnap.exists()) return docSnap.data().value;
+    return null;
+  } catch (err) {
+    console.error('Get value error:', err);
+    return null;
+  }
+};

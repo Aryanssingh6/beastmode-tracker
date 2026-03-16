@@ -1,34 +1,15 @@
 import React from 'react';
 
-function Heatmap() {
-  const getAllActivity = () => {
-    const coding = JSON.parse(localStorage.getItem('coding') || '[]');
-    const studies = JSON.parse(localStorage.getItem('studies') || '[]');
-    const habits = JSON.parse(localStorage.getItem('habits') || '[]');
-    const fitness = JSON.parse(localStorage.getItem('fitness') || '[]');
-
-    const activityMap = {};
-
-    const addActivity = (items, dateKey) => {
-      items.forEach(item => {
-        const date = item[dateKey];
-        if (date) {
-          activityMap[date] = (activityMap[date] || 0) + 1;
-        }
-      });
-    };
-
-    addActivity(coding, 'date');
-    addActivity(studies, 'date');
-    addActivity(fitness, 'date');
-    habits.forEach(h => {
-      if (h.lastChecked) {
-        const date = new Date(h.lastChecked).toLocaleDateString();
-        activityMap[date] = (activityMap[date] || 0) + 1;
+function Heatmap({ data = [], color = 'purple' }) {
+  const getActivityMap = () => {
+    const map = {};
+    data.forEach(item => {
+      const date = item.date;
+      if (date) {
+        map[date] = (map[date] || 0) + 1;
       }
     });
-
-    return activityMap;
+    return map;
   };
 
   const getLast365Days = () => {
@@ -42,14 +23,14 @@ function Heatmap() {
   };
 
   const getColor = (count) => {
-    if (!count || count === 0) return 'bg-gray-100';
-    if (count === 1) return 'bg-purple-200';
-    if (count === 2) return 'bg-purple-400';
-    if (count >= 3) return 'bg-purple-600';
-    return 'bg-gray-100';
+    if (!count || count === 0) return 'bg-[#0a0a0a] border border-gray-800/50';
+    if (count === 1) return `bg-${color}-900/40 border border-${color}-800/50`;
+    if (count === 2) return `bg-${color}-800/60 border border-${color}-600/50`;
+    if (count >= 3) return `bg-${color}-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]`;
+    return 'bg-[#0a0a0a] border border-gray-800/50';
   };
 
-  const activityMap = getAllActivity();
+  const activityMap = getActivityMap();
   const days = getLast365Days();
 
   const weeks = [];
@@ -62,40 +43,41 @@ function Heatmap() {
   const totalContributions = Object.values(activityMap).reduce((a, b) => a + b, 0);
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-[#050505] border border-gray-800/50 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8 border-b border-gray-800/50 pb-4 relative z-10">
         <div>
-          <h3 className="font-black text-gray-900 text-lg">Activity</h3>
-          <p className="text-gray-400 text-sm">{totalContributions} contributions in the last year</p>
+          <h3 className="font-semibold text-white tracking-wide">Activity Map</h3>
+          <p className="text-gray-500 text-sm mt-1">{totalContributions} contributions in the last year</p>
         </div>
         {/* Legend */}
         <div className="flex items-center gap-2">
-          <span className="text-gray-400 text-xs">Less</span>
-          <div className="w-3 h-3 rounded-sm bg-gray-100" />
-          <div className="w-3 h-3 rounded-sm bg-purple-200" />
-          <div className="w-3 h-3 rounded-sm bg-purple-400" />
-          <div className="w-3 h-3 rounded-sm bg-purple-600" />
-          <span className="text-gray-400 text-xs">More</span>
+          <span className="text-gray-500 text-xs font-medium uppercase tracking-wider mr-1">Less</span>
+          <div className="w-3 h-3 rounded-[3px] bg-[#0a0a0a] border border-gray-800/50" />
+          <div className={`w-3 h-3 rounded-[3px] bg-${color}-900/40 border border-${color}-800/50`} />
+          <div className={`w-3 h-3 rounded-[3px] bg-${color}-800/60 border border-${color}-600/50`} />
+          <div className={`w-3 h-3 rounded-[3px] bg-${color}-500 shadow-[0_0_5px_rgba(59,130,246,0.4)]`} />
+          <span className="text-gray-500 text-xs font-medium uppercase tracking-wider ml-1">More</span>
         </div>
       </div>
 
       {/* Month Labels */}
-      <div className="flex gap-1 mb-1 ml-0 overflow-x-auto">
+      <div className="flex gap-1 mb-3 ml-0 overflow-x-auto relative z-10">
         {months.map(m => (
-          <div key={m} className="text-xs text-gray-400 w-7 text-center shrink-0">{m}</div>
+          <div key={m} className="text-xs text-gray-500 w-7 text-center shrink-0 font-medium tracking-wider uppercase">{m}</div>
         ))}
       </div>
 
       {/* Grid */}
-      <div className="flex gap-1 overflow-x-auto pb-2">
+      <div className="flex gap-[4px] overflow-x-auto pb-2 scrollbar-hide relative z-10">
         {weeks.map((week, wi) => (
-          <div key={wi} className="flex flex-col gap-1">
+          <div key={wi} className="flex flex-col gap-[4px]">
             {week.map((day, di) => (
               <div
                 key={di}
                 title={`${day}: ${activityMap[day] || 0} activities`}
-                className={`w-3 h-3 rounded-sm ${getColor(activityMap[day])} hover:ring-2 hover:ring-purple-300 transition-all cursor-pointer`}
+                className={`w-3 h-3 rounded-[3px] ${getColor(activityMap[day])} hover:ring-1 hover:ring-cyan-400 transition-all cursor-crosshair`}
               />
             ))}
           </div>

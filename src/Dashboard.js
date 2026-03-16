@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Code2, BookOpen, Flame, Dumbbell, TrendingUp, Target } from 'lucide-react';
-import Heatmap from './Heatmap';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+// Heatmap moved to individual pages
 
 const quotes = [
   { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
@@ -16,7 +17,6 @@ const quotes = [
 ];
 
 function Dashboard({ setActiveTab, currentUser }) {
-  const [activeDay, setActiveDay] = useState('Weekly');
   const [quote, setQuote] = useState(quotes[0]);
   const [greeting, setGreeting] = useState('');
   const [todaySummary, setTodaySummary] = useState({});
@@ -35,12 +35,35 @@ function Dashboard({ setActiveTab, currentUser }) {
 
     // Today's summary
     const today = new Date().toLocaleDateString();
-    const coding = JSON.parse(localStorage.getItem('coding') || '[]').filter(e => e.date === today).length;
-    const studies = JSON.parse(localStorage.getItem('studies') || '[]').filter(e => e.date === today).length;
-    const fitness = JSON.parse(localStorage.getItem('fitness') || '[]').filter(e => e.date === today).length;
-    const habits = JSON.parse(localStorage.getItem('habits') || '[]').filter(h => h.lastChecked === new Date().toDateString()).length;
-    setTodaySummary({ coding, studies, fitness, habits });
+    const coding = JSON.parse(localStorage.getItem('coding') || '[]');
+    const studies = JSON.parse(localStorage.getItem('studies') || '[]');
+    const fitness = JSON.parse(localStorage.getItem('fitness') || '[]');
+    const habits = JSON.parse(localStorage.getItem('habits') || '[]');
+    
+    const codingToday = coding.filter(e => e.date === today).length;
+    const studiesToday = studies.filter(e => e.date === today).length;
+    const fitnessToday = fitness.filter(e => e.date === today).length;
+    const habitsToday = habits.filter(h => h.lastChecked === new Date().toDateString()).length;
+    
+    setTodaySummary({ coding: codingToday, studies: studiesToday, fitness: fitnessToday, habits: habitsToday });
+
+    // Chart Data (Last 7 Days)
+    const chartData = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toLocaleDateString();
+      chartData.push({
+        name: d.toLocaleDateString(undefined, { weekday: 'short' }),
+        Coding: coding.filter(e => e.date === dateStr).length,
+        Studies: studies.filter(e => e.date === dateStr).length,
+        Fitness: fitness.filter(e => e.date === dateStr).length,
+      });
+    }
+    setChartData(chartData);
   }, []);
+
+  const [chartData, setChartData] = useState([]);
 
   const stats = [
     { label: 'Coding', key: 'coding', icon: Code2, color: 'bg-purple-100', textColor: 'text-purple-500', iconColor: 'text-purple-400' },
@@ -61,21 +84,33 @@ function Dashboard({ setActiveTab, currentUser }) {
   return (
     <div>
       {/* Greeting */}
-      <div className="mb-6">
-        <h2 className="text-3xl font-black text-gray-900">
-          {greeting}, {currentUser?.name?.split(' ')[0]}! 👋
+      <div className="mb-6 flex flex-col items-center justify-center text-center mt-8">
+        {/* Subtle Glowing Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-500/30 mb-6 backdrop-blur-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)] animate-pulse" />
+          <span className="text-xs font-medium bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent tracking-wide">
+            Powered by Your Discipline
+          </span>
+        </div>
+        
+        <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
+          <span className="text-gray-100">{greeting},</span> <br/>
+          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            {currentUser?.name?.split(' ')[0]}
+          </span>
         </h2>
-        <p className="text-gray-400 mt-1">
+        
+        <p className="text-gray-400 text-lg max-w-lg">
           {totalToday === 0
-            ? "You haven't logged anything today. Let's get started! 💪"
-            : `You've logged ${totalToday} activities today. Keep it up! 🔥`}
+            ? "You haven't logged anything today. Time to activate Beast Mode."
+            : `You've logged ${totalToday} activities today. Exceptional work.`}
         </p>
       </div>
 
       {/* Today's Summary */}
       {totalToday > 0 && (
-        <div className="bg-gradient-to-r from-purple-500 to-pink-400 rounded-2xl p-5 mb-6 shadow-sm">
-          <p className="text-white font-bold mb-3 text-sm uppercase tracking-wide">Today's Activity</p>
+        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-5 mb-6 shadow-sm">
+          <p className="font-semibold mb-4 text-sm text-gray-900 dark:text-gray-100">Today's Activity</p>
           <div className="grid grid-cols-4 gap-3">
             {[
               { label: 'Coding', value: todaySummary.coding, icon: Code2 },
@@ -85,10 +120,10 @@ function Dashboard({ setActiveTab, currentUser }) {
             ].map(item => {
               const Icon = item.icon;
               return (
-                <div key={item.label} className="bg-white bg-opacity-20 rounded-xl p-3 text-center">
-                  <Icon size={16} className="text-white mx-auto mb-1" />
-                  <p className="text-white font-black text-xl">{item.value}</p>
-                  <p className="text-purple-100 text-xs">{item.label}</p>
+                <div key={item.label} className="flex flex-col items-center justify-center p-3">
+                  <Icon size={20} className="text-gray-400 mb-2" />
+                  <p className="text-gray-900 dark:text-white font-bold text-2xl">{item.value}</p>
+                  <p className="text-gray-500 text-xs mt-1">{item.label}</p>
                 </div>
               );
             })}
@@ -97,77 +132,118 @@ function Dashboard({ setActiveTab, currentUser }) {
       )}
 
       {/* Top Row */}
-      <div className="flex gap-6 mb-6">
+      <div className="flex flex-col md:flex-row gap-6 mb-6">
         {/* Hero Banner */}
-        <div className="flex-1 bg-gradient-to-br from-pink-300 to-purple-400 rounded-3xl p-8 flex items-center justify-between shadow-sm">
-          <div>
-            <h2 className="text-3xl font-black text-white leading-tight mb-3">
-              Track Your<br />Daily Grind
+        <div className="flex-1 bg-[#050505] border border-gray-800/50 rounded-2xl p-8 flex items-center justify-between shadow-sm relative overflow-hidden group">
+          {/* Subtle hover gradient inside card */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold text-white leading-tight mb-2 tracking-tight">
+              Track Your <span className="text-cyan-400">Daily Grind</span>
             </h2>
-            <p className="text-purple-100 text-sm mb-5 max-w-xs">
-              Build habits, level up skills, and become the best version of yourself.
+            <p className="text-gray-400 text-sm mb-8 max-w-sm leading-relaxed">
+              Build habits, level up skills, and become the best version of yourself with consistent daily action.
             </p>
             <button
               onClick={() => setActiveTab('habits')}
-              className="bg-white text-purple-600 font-bold px-5 py-2 rounded-xl text-sm shadow hover:shadow-md transition-all"
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium px-8 py-3 rounded-full text-sm transition-all shadow-[0_0_20px_rgba(56,189,248,0.15)] hover:shadow-[0_0_25px_rgba(56,189,248,0.3)] flex items-center gap-2"
             >
-              Start Today →
+              Start Tracking →
             </button>
           </div>
-          <div className="flex flex-col items-center gap-2 opacity-80">
-            <TrendingUp size={80} className="text-white" strokeWidth={1.5} />
+          <div className="hidden md:flex flex-col items-center gap-2 relative z-10">
+            <div className="w-24 h-24 rounded-full bg-blue-900/20 flex items-center justify-center border border-blue-500/10">
+              <TrendingUp size={48} className="text-cyan-500" strokeWidth={1.5} />
+            </div>
           </div>
         </div>
 
         {/* Statistics Card */}
-        <div className="w-64 bg-gray-900 rounded-3xl p-6 shadow-sm flex flex-col items-center justify-center">
-          <div className="flex items-center gap-2 mb-4 self-start">
-            <Target size={16} className="text-gray-400" />
-            <p className="text-white font-semibold text-sm">Statistics</p>
+        <div className="w-full md:w-80 bg-[#050505] border border-gray-800/50 rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="flex items-center gap-2 mb-6 text-gray-400">
+            <Target size={16} />
+            <p className="font-medium text-sm">Overall Progress</p>
           </div>
-          <div className="relative w-36 h-36 mb-4">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="54" fill="none" stroke="#374151" strokeWidth="10" />
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            <svg className="w-full h-full -rotate-90 drop-shadow-[0_0_10px_rgba(34,211,238,0.2)]" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="54" fill="none" className="stroke-gray-800/50" strokeWidth="6" />
               <circle
                 cx="60" cy="60" r="54" fill="none"
-                stroke="#a855f7" strokeWidth="10"
+                className="stroke-cyan-400" strokeWidth="6"
                 strokeDasharray={`${strokeDash} ${circumference}`}
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-white text-2xl font-black">{overallProgress}%</span>
-              <span className="text-gray-400 text-xs">Overall</span>
+              <span className="text-white text-3xl font-bold tracking-tight">{overallProgress}%</span>
             </div>
           </div>
           <div className="flex gap-4 w-full justify-around">
-            <div className="text-center">
-              <p className="text-white font-bold text-lg">{totalEntries}</p>
-              <p className="text-gray-500 text-xs">Total Logs</p>
+            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5">
+              <p className="text-white font-bold text-xl">{totalEntries}</p>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mt-1">Total Logs</p>
             </div>
-            <div className="text-center">
-              <p className="text-white font-bold text-lg">
+            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5">
+              <p className="text-white font-bold text-xl">
                 {JSON.parse(localStorage.getItem('habits') || '[]').length}
               </p>
-              <p className="text-gray-500 text-xs">Habits</p>
+              <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mt-1">Habits</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Day Filter */}
-      <div className="flex gap-6 mb-6 border-b border-gray-200 pb-2">
-        {['Daily', 'Weekly', 'Monthly'].map(d => (
+      <div className="flex gap-6 mb-6 border-b border-gray-200 dark:border-gray-800">
+        {['Overview'].map(d => (
           <button
             key={d}
-            onClick={() => setActiveDay(d)}
-            className={`text-sm font-semibold pb-2 transition-all ${activeDay === d
-              ? 'text-gray-900 border-b-2 border-gray-900'
-              : 'text-gray-400 hover:text-gray-600'}`}
+            className={`text-sm font-medium pb-3 transition-colors text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white`}
           >
             {d}
           </button>
         ))}
+      </div>
+
+      {/* Analytics Chart */}
+      <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-6 mb-8 shadow-sm">
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm">7-Day Activity Trend</h3>
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={currentUser ? '#333' : '#e5e7eb'} opacity={0.5} />
+              <XAxis 
+                dataKey="name" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 12, fill: '#9ca3af' }}
+                dy={10}
+              />
+              <YAxis 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 12, fill: '#9ca3af' }}
+                allowDecimals={false}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: '#111', 
+                  border: '1px solid #333',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  fontSize: '12px'
+                }}
+                itemStyle={{ color: '#fff' }}
+              />
+              <Line type="monotone" dataKey="Coding" stroke="#8b5cf6" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="Studies" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="Fitness" stroke="#10b981" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Category Cards */}
@@ -178,26 +254,30 @@ function Dashboard({ setActiveTab, currentUser }) {
             <div
               key={stat.key}
               onClick={() => setActiveTab(stat.key)}
-              className={`${stat.color} rounded-2xl p-5 cursor-pointer hover:scale-105 transition-all shadow-sm`}
+              className="bg-[#050505] border border-gray-800/50 rounded-xl p-5 cursor-pointer hover:border-gray-700 hover:bg-[#0a0a0a] transition-all duration-300 shadow-sm flex flex-col gap-4 group relative overflow-hidden"
             >
-              <Icon size={32} className={`${stat.iconColor} mb-3`} strokeWidth={1.5} />
-              <p className="font-bold text-gray-800 text-lg">{stat.label}</p>
-              <p className={`text-sm font-semibold ${stat.textColor}`}>
-                {getCount(stat.key)} entries
-              </p>
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-900/50 border border-white/5 group-hover:bg-gray-800 transition-colors">
+                 <Icon size={20} className="text-cyan-400" strokeWidth={1.5} />
+              </div>
+              <div className="relative z-10">
+                <p className="font-semibold text-white tracking-wide">{stat.label}</p>
+                <p className="text-sm text-gray-500">
+                  {getCount(stat.key)} entries tracking
+                </p>
+              </div>
             </div>
           );
         })}
       </div>
 
       {/* Motivational Quote */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center mb-6">
-        <p className="text-gray-700 font-semibold text-lg">"{quote.text}"</p>
-        <p className="text-gray-400 text-sm mt-2">— {quote.author}</p>
+      <div className="bg-gray-50 dark:bg-[#111] rounded-xl p-6 border-l-4 border-blue-500 mb-6">
+        <p className="text-gray-700 dark:text-gray-300 text-lg">"{quote.text}"</p>
+        <p className="text-gray-500 dark:text-gray-500 text-sm mt-2 font-medium">— {quote.author}</p>
       </div>
 
-      {/* Heatmap */}
-      <Heatmap />
+      {/* Heatmap moved to individual category pages */}
     </div>
   );
 }

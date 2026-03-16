@@ -13,13 +13,43 @@ import Goals from './Goals';
 import Profile from './Profile';
 import Analytics from './Analytics';
 import AICoach from './AICoach';
+import Pomodoro from './Pomodoro';
 import Notifications from './Notifications';
+import toast, { Toaster } from 'react-hot-toast';
 import { Home, Code2, BookOpen, Flame, Dumbbell, LogOut, Target, User, Menu, X, BarChart2, Sun, Moon } from 'lucide-react';
 
 const slideVariants = {
   enter: { x: 60, opacity: 0 },
   center: { x: 0, opacity: 1 },
   exit: { x: -60, opacity: 0 },
+};
+
+export const getLevel = (xp) => {
+  if (!xp) return { level: 1, currentXP: 0, nextXP: 100, progress: 0, title: 'Novice Tracker' };
+  const level = Math.floor(Math.sqrt(xp / 100)) + 1;
+  const currentLevelXP = Math.pow(level - 1, 2) * 100;
+  const nextLevelXP = Math.pow(level, 2) * 100;
+  const currentXP = xp - currentLevelXP;
+  const nextXP = nextLevelXP - currentLevelXP;
+  
+  const titles = ['Novice Tracker', 'Consistent Beginner', 'Habit Builder', 'Discipline Master', 'Unstoppable Force', 'Beast Mode'];
+  const title = titles[Math.min(level - 1, titles.length - 1)];
+
+  return { level, currentXP, nextXP, progress: (currentXP / nextXP) * 100, title };
+};
+
+export const addXP = (userId, amount) => {
+  const currentXP = parseInt(localStorage.getItem(`xp_${userId}`)) || 0;
+  const newXP = currentXP + amount;
+  localStorage.setItem(`xp_${userId}`, newXP);
+  
+  const oldLevel = getLevel(currentXP).level;
+  const newLevel = getLevel(newXP).level;
+  
+  if (newLevel > oldLevel) {
+    toast.success(`🎉 Level Up! You reached Level ${newLevel}!`, { duration: 4000, icon: '🏆' });
+  }
+  return newXP;
 };
 
 function App() {
@@ -98,59 +128,85 @@ function App() {
       initial={{ x: 60, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`flex min-h-screen font-sans ${darkMode ? 'bg-gray-950' : 'bg-gray-100'}`}
+      className={`flex min-h-screen font-sans relative overflow-hidden ${darkMode ? 'bg-black text-white' : 'bg-gray-100'}`}
     >
+      {/* Premium Background Orbs for Dark Mode */}
+      {darkMode && (
+        <>
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none" />
+        </>
+      )}
+
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-30 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`fixed h-full flex flex-col py-8 px-4 z-40 transition-all duration-300
-        ${sidebarOpen ? 'w-56 left-0' : 'w-56 -left-56 md:left-0'}
-        ${darkMode ? 'bg-gray-900 shadow-gray-800' : 'bg-white shadow-sm'}`}>
+      <div className={`fixed h-full flex flex-col py-6 px-4 z-40 transition-all duration-300 border-r
+        ${sidebarOpen ? 'w-64 left-0' : 'w-64 -left-64 md:left-0'}
+        ${darkMode ? 'bg-[#030303]/90 backdrop-blur-md border-white/5' : 'bg-gray-50 border-gray-200'}`}>
 
         {/* Logo */}
-        <h1 className="text-2xl mb-8 tracking-tight px-2">
-          <span className="font-black italic bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+        <div className="flex items-center gap-2 px-3 mb-8">
+          <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
+            <span className="text-white font-bold text-lg">B</span>
+          </div>
+          <h1 className={`text-xl font-bold tracking-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>
             BeastMode
-          </span>
-        </h1>
+          </h1>
+        </div>
 
         {/* Profile */}
-        <div className="flex flex-col items-center mb-8">
-          {profilePic ? (
-            <img src={profilePic} alt="profile" className="w-16 h-16 rounded-full object-cover mb-2 shadow" />
-          ) : (
-            <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center mb-2 shadow`}>
-              <span className="text-white text-2xl font-bold">
-                {currentUser?.name?.charAt(0).toUpperCase()}
-              </span>
+        <div className="flex flex-col items-center mb-6">
+          <div className="relative">
+            {profilePic ? (
+              <img src={profilePic} alt="profile" className="w-16 h-16 rounded-full object-cover mb-2 shadow" />
+            ) : (
+              <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center mb-2 shadow`}>
+                <span className="text-white text-2xl font-bold">
+                  {currentUser?.name?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+            <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md border-2 border-white dark:border-[#111]">
+              Lvl {getLevel(parseInt(localStorage.getItem(`xp_${currentUser?.id}`)) || 0).level}
             </div>
-          )}
+          </div>
           <p className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-800'}`}>{currentUser?.name}</p>
-          <p className="text-xs text-gray-400">Level Up Every Day</p>
+          <p className="text-xs text-gray-400 font-medium">{getLevel(parseInt(localStorage.getItem(`xp_${currentUser?.id}`)) || 0).title}</p>
+          
+          <div className="w-full px-4 mt-3">
+            <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 mb-1">
+              <div className="bg-blue-500 h-1.5 rounded-full transition-all duration-500" style={{ width: `${getLevel(parseInt(localStorage.getItem(`xp_${currentUser?.id}`)) || 0).progress}%` }}></div>
+            </div>
+            <p className="text-[10px] text-gray-400 text-center uppercase tracking-wider">
+              {getLevel(parseInt(localStorage.getItem(`xp_${currentUser?.id}`)) || 0).currentXP} / {getLevel(parseInt(localStorage.getItem(`xp_${currentUser?.id}`)) || 0).nextXP} XP
+            </p>
+          </div>
         </div>
 
         {/* Nav */}
-        <nav className="flex flex-col gap-1 flex-1 overflow-y-auto">
+        <nav className="flex flex-col gap-1.5 flex-1 overflow-y-auto w-full">
           {navItems.map(item => {
             const Icon = item.icon;
             return (
               <button
                 key={item.id}
                 onClick={() => { setActiveTab(item.id); setSidebarOpen(false); }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
                   ${activeTab === item.id
-                    ? 'bg-gray-900 text-white'
+                    ? darkMode ? 'bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]' : 'bg-white shadow-sm border border-gray-200 text-gray-900'
                     : darkMode
-                      ? 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-800'}`}
+                      ? 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'}`}
               >
-                <Icon size={18} />
+                <Icon size={18} className={activeTab === item.id && darkMode ? "text-cyan-400" : ""} />
                 {item.label}
               </button>
             );
@@ -160,7 +216,8 @@ function App() {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all mt-2"
+          className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors mt-4 w-full
+            ${darkMode ? 'text-gray-500 hover:bg-red-500/10 hover:text-red-400' : 'text-gray-500 hover:bg-red-50 hover:text-red-600'}`}
         >
           <LogOut size={18} />
           Logout
@@ -168,26 +225,31 @@ function App() {
       </div>
 
       {/* Main Content */}
-      <div className="md:ml-56 flex-1 p-4 md:p-8">
+      <div className={`md:ml-64 flex-1 flex flex-col min-h-screen relative z-10 ${darkMode ? 'bg-transparent' : 'bg-white'}`}>
 
         {/* Mobile Header */}
-        <div className="flex items-center justify-between mb-6 md:hidden relative">
-          <h1 className="text-xl italic font-black bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-            BeastMode
-          </h1>
+        <div className={`flex items-center justify-between p-4 md:hidden relative backdrop-blur-md border-b ${darkMode ? 'border-white/5 bg-black/50' : 'border-gray-100 bg-white/80'}`}>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+               <span className="text-white font-bold">B</span>
+            </div>
+            <h1 className="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+              BeastMode
+            </h1>
+          </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border transition-all
-                ${darkMode ? 'bg-gray-800 border-gray-700 text-yellow-400' : 'bg-white border-gray-200 text-gray-600'}`}
+              className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all
+                ${darkMode ? 'bg-white/5 border border-white/10 text-yellow-400 hover:bg-white/10' : 'bg-gray-50 border border-gray-200 text-gray-600'}`}
             >
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <Notifications />
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border
-                ${darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200'}`}
+              className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all
+                ${darkMode ? 'bg-white/5 border border-white/10 text-white hover:bg-white/10' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -195,16 +257,25 @@ function App() {
         </div>
 
         {/* Desktop Header */}
-        <div className="hidden md:flex justify-end items-center gap-3 mb-4 relative">
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border transition-all
-              ${darkMode ? 'bg-gray-800 border-gray-700 text-yellow-400' : 'bg-white border-gray-200 text-gray-600'}`}
-          >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-          <Notifications />
+        <div className={`hidden md:flex justify-between items-center px-8 py-5 border-b backdrop-blur-md sticky top-0 z-20 transition-all
+          ${darkMode ? 'border-white/5 bg-black/50' : 'border-gray-100 bg-white/80'}`}>
+          <div className={`text-sm font-semibold capitalize flex items-center gap-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+            <span className={darkMode ? 'w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]' : 'w-2 h-2 rounded-full bg-blue-500'} />
+            {activeTab}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`w-9 h-9 rounded-lg flex items-center justify-center transition-all
+                ${darkMode ? 'text-gray-400 hover:text-yellow-400 hover:bg-white/5' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
+            >
+              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <Notifications />
+          </div>
         </div>
+
+        <div className="flex-1 p-4 md:p-10 max-w-7xl mx-auto w-full">
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -224,10 +295,12 @@ function App() {
             {activeTab === 'profile' && <Profile currentUser={currentUser} onUpdate={setCurrentUser} darkMode={darkMode} />}
           </motion.div>
         </AnimatePresence>
+        </div>
       </div>
 
-      {/* AI Coach */}
+      {/* Advanced Features */}
       <AICoach currentUser={currentUser} />
+      <Pomodoro />
     </motion.div>
   );
 }

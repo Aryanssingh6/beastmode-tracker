@@ -85,9 +85,9 @@ User says: ${userMsg}`;
       {/* Floating Button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-400 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-all z-50"
+        className="fixed bottom-6 right-6 w-12 h-12 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all z-50 text-white dark:text-gray-900 border border-gray-800 dark:border-gray-200"
       >
-        <Sparkles size={24} className="text-white" />
+        <Sparkles size={20} />
       </button>
 
       {/* Chat Window */}
@@ -98,13 +98,13 @@ User says: ${userMsg}`;
         >
 
           {/* Header */}
-          <div className="bg-gradient-to-r from-purple-500 to-pink-400 px-5 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles size={18} className="text-white" />
-              <p className="text-white font-bold">BeastMode AI Coach</p>
+          <div className="bg-gray-900 dark:bg-white px-5 py-4 flex items-center justify-between border-b border-gray-800 dark:border-gray-200">
+            <div className="flex items-center gap-2 text-white dark:text-gray-900">
+              <Sparkles size={16} />
+              <p className="font-semibold text-sm">BeastMode Coach</p>
             </div>
             <button onClick={() => setOpen(false)}>
-              <X size={18} className="text-white hover:text-purple-200 transition-all" />
+              <X size={16} className="text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors" />
             </button>
           </div>
 
@@ -158,7 +158,7 @@ User says: ${userMsg}`;
 
             <button
               onClick={sendMessage}
-              className="w-10 h-10 bg-gray-900 hover:bg-purple-600 rounded-xl flex items-center justify-center transition-all"
+              className="w-10 h-10 bg-gray-900 hover:bg-gray-800 rounded-xl flex items-center justify-center transition-colors"
             >
               <Send size={16} className="text-white" />
             </button>
