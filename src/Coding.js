@@ -110,6 +110,68 @@ function Coding({ currentUser }) {
     }
   };
 
+  const syncLeetcode = async () => {
+    const username = localStorage.getItem(`leetcode_${currentUser?.id}`);
+    if (!username) {
+      toast.error('Please set your LeetCode username in Profile to sync.');
+      return;
+    }
+
+    try {
+      toast.loading('Syncing LeetCode data...', { id: 'leetcode_sync' });
+      const response = await fetch(`https://alfa-leetcode-api.onrender.com/${username}/calendar`);
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      const data = await response.json();
+      const calendar = data?.submissionCalendar;
+      if (!calendar || Object.keys(calendar).length === 0) {
+        toast.success('No LeetCode submissions found.', { id: 'leetcode_sync' });
+        return;
+      }
+
+      let currentEntries = [...entries];
+      let addedCount = 0;
+      let totalSolved = 0;
+
+      // LeetCode calendar data looks like { "timestamp": count }
+      // We will only look at the last 30 days to keep it reasonable
+      const thirtyDaysAgo = Math.floor(Date.now() / 1000) - (30 * 24 * 60 * 60);
+
+      Object.keys(calendar).forEach(timestamp => {
+        const ts = parseInt(timestamp);
+        if (ts > thirtyDaysAgo) {
+          const count = calendar[timestamp];
+          const date = new Date(ts * 1000).toLocaleDateString();
+
+          const exists = currentEntries.some(e => e.date === date && e.topic === 'LeetCode Problems' && e.note === 'LeetCode Sync');
+
+          if (!exists && count > 0) {
+            currentEntries.unshift({
+              id: Date.now() + Math.random(),
+              topic: 'LeetCode Problems',
+              duration: (count * 0.5).toFixed(1), // Assume ~30 mins per problem average
+              note: 'LeetCode Sync',
+              date: date
+            });
+            addedCount++;
+            totalSolved += count;
+          }
+        }
+      });
+
+      if (addedCount > 0) {
+        setEntries(currentEntries);
+        await saveData(currentUser.id, 'coding', currentEntries);
+        addXP(currentUser.id, totalSolved * 10); // Reward 10 XP per problem
+        toast.success(`Synced ${totalSolved} LeetCode submissions! (+${totalSolved * 10} XP)`, { id: 'leetcode_sync' });
+      } else {
+        toast.success('You are already up to date with LeetCode.', { id: 'leetcode_sync' });
+      }
+    } catch (error) {
+      toast.error('Failed to sync. Please check your LeetCode username in Profile.', { id: 'leetcode_sync' });
+    }
+  };
+
   const getWeeklyHours = () => {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -246,7 +308,7 @@ function Coding({ currentUser }) {
             className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
           />
         </div>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
           <button
             onClick={addEntry}
             className="flex-1 shrink-0 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium px-6 py-2.5 rounded-full text-sm transition-all shadow-[0_0_15px_rgba(56,189,248,0.2)] hover:shadow-[0_0_20px_rgba(56,189,248,0.3)]"
@@ -254,13 +316,22 @@ function Coding({ currentUser }) {
             <Plus size={16} />
             Log Session
           </button>
-          <button
-            onClick={syncGithub}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 hover:border-gray-600 text-gray-300 hover:text-white font-medium px-6 py-2.5 rounded-full text-sm transition-all shadow-sm"
-          >
-            <Github size={16} />
-            Sync Commits
-          </button>
+          <div className="flex gap-2 flex-1 sm:flex-none">
+            <button
+              onClick={syncGithub}
+              className="flex-1 flex items-center justify-center gap-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 hover:border-gray-600 text-gray-300 hover:text-white font-medium px-4 py-2.5 rounded-full text-sm transition-all shadow-sm whitespace-nowrap"
+            >
+              <Github size={16} />
+              GitHub
+            </button>
+            <button
+              onClick={syncLeetcode}
+              className="flex-1 flex items-center justify-center gap-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 hover:border-gray-600 text-orange-400 hover:text-orange-300 font-medium px-4 py-2.5 rounded-full text-sm transition-all shadow-sm whitespace-nowrap"
+            >
+              <Code2 size={16} />
+              LeetCode
+            </button>
+          </div>
         </div>
       </div>
 

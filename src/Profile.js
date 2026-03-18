@@ -13,6 +13,7 @@ function Profile({ currentUser, onUpdate }) {
   });
   const [stats, setStats] = useState({ coding: [], studies: [], habits: [], fitness: [] });
   const [githubUser, setGithubUser] = useState(localStorage.getItem(`github_${currentUser?.id}`) || '');
+  const [leetcodeUser, setLeetcodeUser] = useState(localStorage.getItem(`leetcode_${currentUser?.id}`) || '');
 
   const avatarColors = [
     'from-purple-400 to-pink-400',
@@ -71,6 +72,7 @@ function Profile({ currentUser, onUpdate }) {
     localStorage.setItem('goal_fitness', goals.fitness);
     localStorage.setItem('goal_studies', goals.studies);
     localStorage.setItem(`github_${currentUser?.id}`, githubUser);
+    localStorage.setItem(`leetcode_${currentUser?.id}`, leetcodeUser);
 
     onUpdate(updated);
     toast.success('Profile and goals updated successfully!');
@@ -184,6 +186,16 @@ function Profile({ currentUser, onUpdate }) {
                 placeholder="GitHub Username (for syncing)"
                 value={githubUser}
                 onChange={e => setGithubUser(e.target.value)}
+                className="w-full bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 rounded-md pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+              />
+            </div>
+            <div className="relative">
+              <Target size={16} className="absolute left-3.5 top-3 text-gray-400" />
+              <input
+                type="text"
+                placeholder="LeetCode Username (for syncing)"
+                value={leetcodeUser}
+                onChange={e => setLeetcodeUser(e.target.value)}
                 className="w-full bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 rounded-md pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
               />
             </div>
