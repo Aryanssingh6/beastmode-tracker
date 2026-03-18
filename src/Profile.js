@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Save, Camera, Target, Download, Github } from 'lucide-react';
+import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { getData } from './firestore';
 
@@ -95,7 +96,12 @@ function Profile({ currentUser, onUpdate }) {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="relative"
+    >
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center">
@@ -108,9 +114,10 @@ function Profile({ currentUser, onUpdate }) {
       </div>
 
       {/* Avatar Upload */}
-      <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-6 mb-6 shadow-sm">
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm">Profile Picture container</h3>
-        <div className="flex items-center gap-8">
+      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 mb-6 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm relative z-10">Profile Picture container</h3>
+        <div className="flex items-center gap-8 relative z-10">
           {/* Avatar */}
           <div className="relative">
             {profilePic ? (
@@ -157,7 +164,7 @@ function Profile({ currentUser, onUpdate }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Edit Info */}
-        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+        <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 shadow-sm">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm">Account Details</h3>
           <div className="space-y-4">
             <div className="relative">
@@ -203,7 +210,7 @@ function Profile({ currentUser, onUpdate }) {
         </div>
 
         {/* Weekly Goals */}
-        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+        <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 shadow-sm">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm flex items-center gap-2">
             <Target size={16} className="text-gray-400" />
             Weekly Goals
@@ -259,7 +266,7 @@ function Profile({ currentUser, onUpdate }) {
       </div>
 
       {/* Stats Summary */}
-      <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm">Your Lifetime Stats</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
@@ -277,7 +284,7 @@ function Profile({ currentUser, onUpdate }) {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Flame, Plus, Trash2, CheckCircle2, Circle } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { saveData, getData } from './firestore';
 import { addXP } from './App';
 import toast from 'react-hot-toast';
@@ -64,7 +65,12 @@ function Habits({ currentUser }) {
   const longestStreak = habits.reduce((max, h) => h.streak > max ? h.streak : max, 0);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="relative"
+    >
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center">
           <Flame size={20} className="text-gray-700 dark:text-gray-300" strokeWidth={1.5} />
@@ -76,7 +82,8 @@ function Habits({ currentUser }) {
       </div>
 
       {/* Stats Cards */}
-      <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-6 mb-6 shadow-sm">
+      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 mb-6 shadow-sm relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center">
             <p className="text-gray-500 dark:text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1">Today</p>
@@ -99,7 +106,7 @@ function Habits({ currentUser }) {
 
       {/* Progress Bar */}
       {habits.length > 0 && (
-        <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-5 mb-6 shadow-sm">
+        <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-5 mb-6 shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Today's Progress</p>
             <p className="text-sm font-bold text-gray-900 dark:text-white">
@@ -116,7 +123,7 @@ function Habits({ currentUser }) {
       )}
 
       {/* Add Habit */}
-      <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl p-5 mb-6 shadow-sm">
+      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-5 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm">Add New Habit</h3>
         <div className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
@@ -141,7 +148,7 @@ function Habits({ currentUser }) {
       </div>
 
       {/* Habits List */}
-      <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden mb-6">
+      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl shadow-sm overflow-hidden mb-6">
         {loading && (
           <div className="p-8 text-center">
             <p className="text-gray-400 font-medium text-sm">Loading...</p>
@@ -155,19 +162,22 @@ function Habits({ currentUser }) {
             <p className="font-medium text-sm">No habits yet. Build your routine!</p>
           </div>
         )}
-        <div className="divide-y divide-gray-100 dark:divide-gray-800">
-          {habits.map(habit => {
+        <div className="divide-y divide-gray-800/50">
+          {habits.map((habit, index) => {
             const doneToday = habit.lastChecked === today;
             return (
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
                 key={habit.id}
                 className={`p-4 flex items-center justify-between transition-colors
-                  ${doneToday ? 'bg-blue-50/50 dark:bg-blue-900/10' : 'hover:bg-gray-50 dark:hover:bg-[#1a1a1a]'}`}
+                  ${doneToday ? 'bg-blue-500/10 dark:bg-blue-900/20' : 'hover:bg-white/5 dark:hover:bg-[#1a1a1a]'}`}
               >
                 <div className="flex items-center gap-4">
                   <button onClick={() => toggleHabit(habit.id)} className="flex-shrink-0">
                     {doneToday
-                      ? <CheckCircle2 size={20} className="text-blue-500" />
+                      ? <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }}><CheckCircle2 size={20} className="text-blue-500" /></motion.div>
                       : <Circle size={20} className="text-gray-300 dark:text-gray-600 hover:text-blue-400 transition-colors" />
                     }
                   </button>
@@ -189,12 +199,12 @@ function Habits({ currentUser }) {
                 >
                   <Trash2 size={16} />
                 </button>
-              </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

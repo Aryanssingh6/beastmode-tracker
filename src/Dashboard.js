@@ -1,7 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Code2, BookOpen, Flame, Dumbbell, TrendingUp, Target } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-// Heatmap moved to individual pages
+import { motion } from 'framer-motion';
+
+const CountUp = ({ end, duration = 2000, suffix = "" }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime;
+    let animationFrame;
+
+    const updateCount = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percentage = Math.min(progress / duration, 1);
+      
+      const easeOutQuart = 1 - Math.pow(1 - percentage, 4);
+      setCount(Math.floor(end * easeOutQuart));
+
+      if (percentage < 1) {
+        animationFrame = window.requestAnimationFrame(updateCount);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(updateCount);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [end, duration]);
+
+  return <>{count}{suffix}</>;
+};
 
 const quotes = [
   { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" },
@@ -139,24 +166,42 @@ function Dashboard({ setActiveTab, currentUser }) {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           
           <div className="relative z-10">
-            <h2 className="text-2xl font-bold text-white leading-tight mb-2 tracking-tight">
+            <motion.h2 
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+              className="text-2xl font-bold text-white leading-tight mb-2 tracking-tight"
+            >
               Track Your <span className="text-cyan-400">Daily Grind</span>
-            </h2>
-            <p className="text-gray-400 text-sm mb-8 max-w-sm leading-relaxed">
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.6 }}
+              className="text-gray-400 text-sm mb-8 max-w-sm leading-relaxed"
+            >
               Build habits, level up skills, and become the best version of yourself with consistent daily action.
-            </p>
-            <button
+            </motion.p>
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4, duration: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setActiveTab('habits')}
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium px-8 py-3 rounded-full text-sm transition-all shadow-[0_0_20px_rgba(56,189,248,0.15)] hover:shadow-[0_0_25px_rgba(56,189,248,0.3)] flex items-center gap-2"
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium px-8 py-3 rounded-full text-sm transition-all shadow-[0_0_20px_rgba(56,189,248,0.15)] flex items-center gap-2"
             >
               Start Tracking →
-            </button>
+            </motion.button>
           </div>
-          <div className="hidden md:flex flex-col items-center gap-2 relative z-10">
-            <div className="w-24 h-24 rounded-full bg-blue-900/20 flex items-center justify-center border border-blue-500/10">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }} 
+            animate={{ opacity: 1, scale: 1 }} 
+            transition={{ type: "spring", stiffness: 100, delay: 0.3 }}
+            className="hidden md:flex flex-col items-center gap-2 relative z-10"
+          >
+            <motion.div 
+              animate={{ y: [-5, 5, -5] }} 
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              className="w-24 h-24 rounded-full bg-blue-900/20 flex items-center justify-center border border-blue-500/10 shadow-[0_0_30px_rgba(34,211,238,0.15)]"
+            >
               <TrendingUp size={48} className="text-cyan-500" strokeWidth={1.5} />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Statistics Card */}
@@ -170,25 +215,28 @@ function Dashboard({ setActiveTab, currentUser }) {
           <div className="relative w-32 h-32 mx-auto mb-8">
             <svg className="w-full h-full -rotate-90 drop-shadow-[0_0_10px_rgba(34,211,238,0.2)]" viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="54" fill="none" className="stroke-gray-800/50" strokeWidth="6" />
-              <circle
+              <motion.circle
                 cx="60" cy="60" r="54" fill="none"
                 className="stroke-cyan-400" strokeWidth="6"
-                strokeDasharray={`${strokeDash} ${circumference}`}
+                strokeDasharray={circumference}
+                initial={{ strokeDashoffset: circumference }}
+                animate={{ strokeDashoffset: circumference - strokeDash }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
                 strokeLinecap="round"
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-white text-3xl font-bold tracking-tight">{overallProgress}%</span>
+              <span className="text-white text-3xl font-bold tracking-tight"><CountUp end={overallProgress} suffix="%" /></span>
             </div>
           </div>
           <div className="flex gap-4 w-full justify-around">
-            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5">
-              <p className="text-white font-bold text-xl">{totalEntries}</p>
+            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5 transition-transform hover:-translate-y-1">
+              <p className="text-white font-bold text-xl"><CountUp end={totalEntries} /></p>
               <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mt-1">Total Logs</p>
             </div>
-            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5">
+            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5 transition-transform hover:-translate-y-1">
               <p className="text-white font-bold text-xl">
-                {JSON.parse(localStorage.getItem('habits') || '[]').length}
+                <CountUp end={JSON.parse(localStorage.getItem('habits') || '[]').length} />
               </p>
               <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mt-1">Habits</p>
             </div>
