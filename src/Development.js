@@ -124,33 +124,33 @@ function Development({ currentUser, darkMode }) {
         
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           {/* Skeleton Profile Stats */}
-          <div className="col-span-1 bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse flex flex-col items-center">
-            <div className="w-20 h-20 rounded-full bg-gray-800 mb-4"></div>
-            <div className="h-5 w-24 bg-gray-800 rounded mb-6"></div>
+          <div className="col-span-1 bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm animate-pulse flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full bg-gray-200 dark:bg-gray-800 mb-4"></div>
+            <div className="h-5 w-24 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
             <div className="w-full grid grid-cols-2 gap-3">
-               <div className="h-16 bg-gray-800 rounded-lg"></div>
-               <div className="h-16 bg-gray-800 rounded-lg"></div>
+               <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+               <div className="h-16 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
             </div>
           </div>
           {/* Skeleton Repositories */}
-          <div className="col-span-1 md:col-span-2 bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse">
-            <div className="h-6 w-40 bg-gray-800 rounded mb-6"></div>
+          <div className="col-span-1 md:col-span-2 bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm animate-pulse">
+            <div className="h-6 w-40 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-               <div className="h-20 bg-gray-800 rounded-lg"></div>
-               <div className="h-20 bg-gray-800 rounded-lg"></div>
-               <div className="h-20 bg-gray-800 rounded-lg"></div>
-               <div className="h-20 bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
             </div>
           </div>
         </div>
         
         {/* Skeleton Timeline */}
-        <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse relative z-10">
-           <div className="h-6 w-48 bg-gray-800 rounded mb-6"></div>
-           <div className="space-y-6 pl-4 border-l border-gray-800">
-             <div className="h-4 w-3/4 bg-gray-800 rounded"></div>
-             <div className="h-4 w-1/2 bg-gray-800 rounded"></div>
-             <div className="h-4 w-2/3 bg-gray-800 rounded"></div>
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm animate-pulse relative z-10">
+           <div className="h-6 w-48 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
+           <div className="space-y-6 pl-4 border-l border-gray-200 dark:border-gray-800">
+             <div className="h-4 w-3/4 bg-gray-200 dark:bg-gray-800 rounded"></div>
+             <div className="h-4 w-1/2 bg-gray-200 dark:bg-gray-800 rounded"></div>
+             <div className="h-4 w-2/3 bg-gray-200 dark:bg-gray-800 rounded"></div>
            </div>
         </div>
       </div>
@@ -199,29 +199,29 @@ function Development({ currentUser, darkMode }) {
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         
         {/* Profile Stats Card */}
-        <div className="col-span-1 bg-[#111111]/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
-          <img src={stats?.avatar_url} alt="GitHub Avatar" className="w-20 h-20 rounded-full border-2 border-gray-700 mb-3" />
-          <div className="flex items-center gap-2 text-white font-bold text-lg mb-1">
+        <div className="col-span-1 bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
+          <img src={stats?.avatar_url} alt="GitHub Avatar" className="w-20 h-20 rounded-full border-2 border-gray-200 dark:border-gray-700 mb-3" />
+          <div className="flex items-center gap-2 text-gray-900 dark:text-white font-bold text-lg mb-1">
             <Github size={18} />
             <span>GitHub Stats</span>
           </div>
-          <p className="text-xs text-blue-400 font-medium mb-4">Web Developer</p>
+          <p className="text-xs text-blue-500 dark:text-blue-400 font-medium mb-4">Web Developer</p>
           
           <div className="w-full grid grid-cols-2 gap-3 mt-2">
-            <div className="bg-[#1a1a1a] rounded-lg p-3 border border-gray-800 font-semibold text-gray-300 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
-              <span className="block text-xl text-white"><CountUp end={stats?.public_repos || 0} /></span>
+            <div className="bg-gray-50 dark:bg-[#1a1a1a] rounded-lg p-3 border border-gray-200 dark:border-gray-800 font-semibold text-gray-700 dark:text-gray-300 transition-all hover:bg-gray-100 dark:hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <span className="block text-xl text-gray-900 dark:text-white"><CountUp end={stats?.public_repos || 0} /></span>
               <span className="text-[10px] text-gray-500 uppercase tracking-widest">Repos</span>
             </div>
-            <div className="bg-[#1a1a1a] rounded-lg p-3 border border-gray-800 font-semibold text-gray-300 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
-              <span className="block text-xl text-white"><CountUp end={stats?.followers || 0} /></span>
+            <div className="bg-gray-50 dark:bg-[#1a1a1a] rounded-lg p-3 border border-gray-200 dark:border-gray-800 font-semibold text-gray-700 dark:text-gray-300 transition-all hover:bg-gray-100 dark:hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <span className="block text-xl text-gray-900 dark:text-white"><CountUp end={stats?.followers || 0} /></span>
               <span className="text-[10px] text-gray-500 uppercase tracking-widest">Followers</span>
             </div>
           </div>
         </div>
 
         {/* Recent Repositories */}
-        <div className="col-span-1 md:col-span-2 bg-[#111111]/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-sm">
-          <h3 className="text-gray-200 font-bold mb-4 flex items-center gap-2 border-b border-gray-800 pb-3">
+        <div className="col-span-1 md:col-span-2 bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+          <h3 className="text-gray-900 dark:text-gray-200 font-bold mb-4 flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-3">
             <FileCode2 className="text-cyan-500" size={18} />
             Active Repositories
           </h3>
@@ -233,10 +233,10 @@ function Development({ currentUser, darkMode }) {
                 target="_blank" 
                 rel="noreferrer"
                 key={repo.id} 
-                className="bg-[#1a1a1a] border border-gray-800/60 p-3 rounded-lg hover:border-blue-500/50 hover:bg-[#202020] transition-colors group cursor-pointer"
+                className="bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800/60 p-3 rounded-lg hover:border-blue-500/50 dark:hover:border-blue-500/50 hover:bg-gray-100 dark:hover:bg-[#202020] transition-colors group cursor-pointer"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <h4 className="text-sm font-semibold text-blue-400 group-hover:text-blue-300 truncate pr-2">
+                  <h4 className="text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300 truncate pr-2">
                     {repo.name}
                   </h4>
                   {repo.stargazers_count > 0 && <span className="flex items-center text-xs text-yellow-500 font-medium gap-1"><Star size={10} />{repo.stargazers_count}</span>}
@@ -253,25 +253,25 @@ function Development({ currentUser, darkMode }) {
       </div>
 
       {/* Recent Activity Timeline */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-sm relative z-10">
-         <h3 className="text-gray-200 font-bold mb-6 flex items-center gap-2 border-b border-gray-800 pb-3">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm relative z-10">
+         <h3 className="text-gray-900 dark:text-gray-200 font-bold mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-3">
             <GitCommit className="text-purple-500" size={18} />
             Recent Terminal Activity
          </h3>
          
-         <div className="space-y-4 pl-2 border-l border-gray-800 ml-3">
+         <div className="space-y-4 pl-2 border-l border-gray-200 dark:border-gray-800 ml-3">
            {events.length === 0 ? <p className="text-sm text-gray-500 pl-4">No recent pushes found.</p> : null}
            {events.map((event, idx) => (
              <div key={idx} className="relative pl-6">
-                <div className="absolute -left-[5.5px] top-1.5 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-[#111] shadow-[0_0_5px_rgba(168,85,247,0.5)]"></div>
+                <div className="absolute -left-[5.5px] top-1.5 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-white dark:border-[#111] shadow-[0_0_5px_rgba(168,85,247,0.5)]"></div>
                 <div className="flex flex-col">
                   <p className="text-xs text-gray-500 mb-1 font-mono">{new Date(event.created_at).toLocaleString()}</p>
-                  <p className="text-sm text-gray-300 font-medium break-words">
+                  <p className="text-sm text-gray-800 dark:text-gray-300 font-medium break-words">
                     {event.type === 'PushEvent' ? `Pushed ${event.payload.commits?.length || 0} commits to ` : 'Created branch in '}
-                    <span className="text-purple-400 font-semibold">{event.repo.name}</span>
+                    <span className="text-purple-600 dark:text-purple-400 font-semibold">{event.repo.name}</span>
                   </p>
                   {event.type === 'PushEvent' && event.payload.commits?.length > 0 && (
-                     <div className="mt-2 text-xs text-gray-400 bg-[#1a1a1a] border border-gray-800 rounded px-2 py-1.5 font-mono truncate">
+                     <div className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded px-2 py-1.5 font-mono truncate">
                        {event.payload.commits[0].message}
                      </div>
                   )}

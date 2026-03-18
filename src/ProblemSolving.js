@@ -149,34 +149,34 @@ function ProblemSolving({ currentUser, darkMode }) {
         {/* Skeleton Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mb-6">
           {/* Skeleton Awards */}
-          <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse">
-            <div className="h-6 w-32 bg-gray-800 rounded mb-4"></div>
-            <div className="h-4 w-12 bg-gray-800 rounded mb-6"></div>
+          <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm animate-pulse">
+            <div className="h-6 w-32 bg-gray-200 dark:bg-gray-800 rounded mb-4"></div>
+            <div className="h-4 w-12 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
             <div className="flex gap-4">
-              <div className="w-16 h-16 bg-gray-800 rounded-lg"></div>
-              <div className="w-16 h-16 bg-gray-800 rounded-lg"></div>
-              <div className="w-16 h-16 bg-gray-800 rounded-lg"></div>
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+              <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
             </div>
           </div>
           {/* Skeleton Chart */}
-          <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse flex items-center justify-between">
-             <div className="w-32 h-32 bg-gray-800 rounded-full border-4 border-gray-700/50"></div>
+          <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm animate-pulse flex items-center justify-between">
+             <div className="w-32 h-32 bg-gray-200 dark:bg-gray-800 rounded-full border-4 border-gray-100 dark:border-gray-700/50"></div>
              <div className="flex-1 ml-6 space-y-4">
-               <div className="h-8 bg-gray-800 rounded"></div>
-               <div className="h-8 bg-gray-800 rounded"></div>
-               <div className="h-8 bg-gray-800 rounded"></div>
+               <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded"></div>
+               <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded"></div>
+               <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded"></div>
              </div>
           </div>
         </div>
         {/* Skeleton Bar Chart */}
-        <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse relative z-10">
-           <div className="h-6 w-48 bg-gray-800 rounded mb-6"></div>
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm animate-pulse relative z-10">
+           <div className="h-6 w-48 bg-gray-200 dark:bg-gray-800 rounded mb-6"></div>
            <div className="space-y-4">
-             <div className="h-3 w-3/4 bg-gray-800 rounded"></div>
-             <div className="h-3 w-1/2 bg-gray-800 rounded"></div>
-             <div className="h-3 w-2/3 bg-gray-800 rounded"></div>
-             <div className="h-3 w-1/3 bg-gray-800 rounded"></div>
-             <div className="h-3 w-4/5 bg-gray-800 rounded"></div>
+             <div className="h-3 w-3/4 bg-gray-200 dark:bg-gray-800 rounded"></div>
+             <div className="h-3 w-1/2 bg-gray-200 dark:bg-gray-800 rounded"></div>
+             <div className="h-3 w-2/3 bg-gray-200 dark:bg-gray-800 rounded"></div>
+             <div className="h-3 w-1/3 bg-gray-200 dark:bg-gray-800 rounded"></div>
+             <div className="h-3 w-4/5 bg-gray-200 dark:bg-gray-800 rounded"></div>
            </div>
         </div>
       </div>
@@ -229,8 +229,8 @@ function ProblemSolving({ currentUser, darkMode }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mb-6">
         {/* Awards Section */}
-        <div className="bg-[#111111]/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-sm">
-          <h3 className="text-gray-200 font-bold mb-4 flex items-center gap-2">
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+          <h3 className="text-gray-900 dark:text-gray-200 font-bold mb-4 flex items-center gap-2">
             <Award className="text-blue-500" size={18} />
             Awards
           </h3>
@@ -258,8 +258,8 @@ function ProblemSolving({ currentUser, darkMode }) {
         </div>
 
         {/* Problems Solved */}
-        <div className="bg-[#111111]/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-sm">
-          <h3 className="text-gray-200 font-bold mb-6 text-center text-lg shadow-sm border-b border-gray-800 pb-2">Problems Solved</h3>
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+          <h3 className="text-gray-900 dark:text-gray-200 font-bold mb-6 text-center text-lg shadow-sm border-b border-gray-200 dark:border-gray-800 pb-2">Problems Solved</h3>
           
           <div className="flex items-center justify-between">
             <div className="relative w-36 h-36">
@@ -284,23 +284,23 @@ function ProblemSolving({ currentUser, darkMode }) {
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-white tracking-tight"><CountUp end={solvedData?.total || 0} /></span>
+                <span className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight"><CountUp end={solvedData?.total || 0} /></span>
               </div>
             </div>
 
             <div className="flex-1 ml-6 space-y-4">
-              <p className="text-xs text-center text-gray-400 font-semibold mb-2 shadow-sm uppercase tracking-wider">DSA</p>
-              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <p className="text-xs text-center text-gray-500 dark:text-gray-400 font-semibold mb-2 shadow-sm uppercase tracking-wider">DSA</p>
+              <div className="bg-gray-50 dark:bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-200 dark:border-gray-800/50 transition-all hover:bg-gray-100 dark:hover:bg-[#202020] hover:scale-[1.02] cursor-default">
                 <span className="text-green-500 text-sm font-semibold">Easy</span>
-                <span className="text-gray-300 font-bold text-sm"><CountUp end={solvedData?.easy || 0} /></span>
+                <span className="text-gray-900 dark:text-gray-300 font-bold text-sm"><CountUp end={solvedData?.easy || 0} /></span>
               </div>
-              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <div className="bg-gray-50 dark:bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-200 dark:border-gray-800/50 transition-all hover:bg-gray-100 dark:hover:bg-[#202020] hover:scale-[1.02] cursor-default">
                 <span className="text-yellow-500 text-sm font-semibold">Medium</span>
-                <span className="text-gray-300 font-bold text-sm"><CountUp end={solvedData?.medium || 0} /></span>
+                <span className="text-gray-900 dark:text-gray-300 font-bold text-sm"><CountUp end={solvedData?.medium || 0} /></span>
               </div>
-              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <div className="bg-gray-50 dark:bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-200 dark:border-gray-800/50 transition-all hover:bg-gray-100 dark:hover:bg-[#202020] hover:scale-[1.02] cursor-default">
                 <span className="text-red-500 text-sm font-semibold">Hard</span>
-                <span className="text-gray-300 font-bold text-sm"><CountUp end={solvedData?.hard || 0} /></span>
+                <span className="text-gray-900 dark:text-gray-300 font-bold text-sm"><CountUp end={solvedData?.hard || 0} /></span>
               </div>
             </div>
           </div>
@@ -308,9 +308,9 @@ function ProblemSolving({ currentUser, darkMode }) {
       </div>
 
       {/* DSA Topic Analysis Horizontal Bar Chart */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 shadow-sm relative z-10 min-h-[300px]">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm relative z-10 min-h-[300px]">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-gray-200 font-bold flex items-center gap-2">
+          <h3 className="text-gray-900 dark:text-gray-200 font-bold flex items-center gap-2">
             <TerminalSquare className="text-blue-500" size={18} />
             DSA Topic Analysis
           </h3>

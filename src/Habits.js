@@ -82,7 +82,7 @@ function Habits({ currentUser }) {
       </div>
 
       {/* Stats Cards */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 mb-6 shadow-sm relative overflow-hidden">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-6 mb-6 shadow-sm relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center">
@@ -106,7 +106,7 @@ function Habits({ currentUser }) {
 
       {/* Progress Bar */}
       {habits.length > 0 && (
-        <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-5 mb-6 shadow-sm">
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-5 mb-6 shadow-sm">
           <div className="flex justify-between items-center mb-3">
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Today's Progress</p>
             <p className="text-sm font-bold text-gray-900 dark:text-white">
@@ -123,7 +123,7 @@ function Habits({ currentUser }) {
       )}
 
       {/* Add Habit */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-5 mb-6 shadow-sm">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-5 mb-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm">Add New Habit</h3>
         <div className="flex flex-col md:flex-row gap-3">
           <div className="relative flex-1">
@@ -148,7 +148,7 @@ function Habits({ currentUser }) {
       </div>
 
       {/* Habits List */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl shadow-sm overflow-hidden mb-6">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl shadow-sm overflow-hidden mb-6">
         {loading && (
           <div className="p-8 text-center">
             <p className="text-gray-400 font-medium text-sm">Loading...</p>
@@ -162,7 +162,7 @@ function Habits({ currentUser }) {
             <p className="font-medium text-sm">No habits yet. Build your routine!</p>
           </div>
         )}
-        <div className="divide-y divide-gray-800/50">
+        <div className="divide-y divide-gray-200 dark:divide-gray-800/50">
           {habits.map((habit, index) => {
             const doneToday = habit.lastChecked === today;
             return (

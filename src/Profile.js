@@ -114,7 +114,7 @@ function Profile({ currentUser, onUpdate }) {
       </div>
 
       {/* Avatar Upload */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 mb-6 shadow-sm relative overflow-hidden">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-6 mb-6 shadow-sm relative overflow-hidden">
         <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
         <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm relative z-10">Profile Picture container</h3>
         <div className="flex items-center gap-8 relative z-10">
@@ -164,7 +164,7 @@ function Profile({ currentUser, onUpdate }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Edit Info */}
-        <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 shadow-sm">
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-6 shadow-sm">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm">Account Details</h3>
           <div className="space-y-4">
             <div className="relative">
@@ -210,7 +210,7 @@ function Profile({ currentUser, onUpdate }) {
         </div>
 
         {/* Weekly Goals */}
-        <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 shadow-sm">
+        <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-6 shadow-sm">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm flex items-center gap-2">
             <Target size={16} className="text-gray-400" />
             Weekly Goals
@@ -266,7 +266,7 @@ function Profile({ currentUser, onUpdate }) {
       </div>
 
       {/* Stats Summary */}
-      <div className="bg-[#111111]/80 backdrop-blur-md border border-white/5 rounded-xl p-6 shadow-sm">
+      <div className="bg-white/90 dark:bg-[#111111]/80 backdrop-blur-md border border-gray-200 dark:border-white/5 rounded-xl p-6 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-6 text-sm">Your Lifetime Stats</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[

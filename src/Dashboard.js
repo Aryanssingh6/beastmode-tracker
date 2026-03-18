@@ -161,20 +161,20 @@ function Dashboard({ setActiveTab, currentUser }) {
       {/* Top Row */}
       <div className="flex flex-col md:flex-row gap-6 mb-6">
         {/* Hero Banner */}
-        <div className="flex-1 bg-[#050505] border border-gray-800/50 rounded-2xl p-8 flex items-center justify-between shadow-sm relative overflow-hidden group">
+        <div className="flex-1 bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-8 flex items-center justify-between shadow-sm relative overflow-hidden group">
           {/* Subtle hover gradient inside card */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           
           <div className="relative z-10">
             <motion.h2 
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              className="text-2xl font-bold text-white leading-tight mb-2 tracking-tight"
+              className="text-2xl font-bold text-gray-900 dark:text-white leading-tight mb-2 tracking-tight"
             >
               Track Your <span className="text-cyan-400">Daily Grind</span>
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-gray-400 text-sm mb-8 max-w-sm leading-relaxed"
+              className="text-gray-600 dark:text-gray-400 text-sm mb-8 max-w-sm leading-relaxed"
             >
               Build habits, level up skills, and become the best version of yourself with consistent daily action.
             </motion.p>
@@ -205,16 +205,16 @@ function Dashboard({ setActiveTab, currentUser }) {
         </div>
 
         {/* Statistics Card */}
-        <div className="w-full md:w-80 bg-[#050505] border border-gray-800/50 rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
+        <div className="w-full md:w-80 bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 shadow-sm flex flex-col justify-center relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
           
-          <div className="flex items-center gap-2 mb-6 text-gray-400">
+          <div className="flex items-center gap-2 mb-6 text-gray-600 dark:text-gray-400">
             <Target size={16} />
             <p className="font-medium text-sm">Overall Progress</p>
           </div>
           <div className="relative w-32 h-32 mx-auto mb-8">
             <svg className="w-full h-full -rotate-90 drop-shadow-[0_0_10px_rgba(34,211,238,0.2)]" viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="54" fill="none" className="stroke-gray-800/50" strokeWidth="6" />
+              <circle cx="60" cy="60" r="54" fill="none" className="stroke-gray-200 dark:stroke-gray-800/50" strokeWidth="6" />
               <motion.circle
                 cx="60" cy="60" r="54" fill="none"
                 className="stroke-cyan-400" strokeWidth="6"
@@ -226,16 +226,16 @@ function Dashboard({ setActiveTab, currentUser }) {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-white text-3xl font-bold tracking-tight"><CountUp end={overallProgress} suffix="%" /></span>
+              <span className="text-gray-900 dark:text-white text-3xl font-bold tracking-tight"><CountUp end={overallProgress} suffix="%" /></span>
             </div>
           </div>
           <div className="flex gap-4 w-full justify-around">
-            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5 transition-transform hover:-translate-y-1">
-              <p className="text-white font-bold text-xl"><CountUp end={totalEntries} /></p>
+            <div className="text-center bg-gray-100 dark:bg-gray-900/30 rounded-xl p-3 flex-1 border border-gray-200 dark:border-white/5 transition-transform hover:-translate-y-1">
+              <p className="text-gray-900 dark:text-white font-bold text-xl"><CountUp end={totalEntries} /></p>
               <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mt-1">Total Logs</p>
             </div>
-            <div className="text-center bg-gray-900/30 rounded-xl p-3 flex-1 border border-white/5 transition-transform hover:-translate-y-1">
-              <p className="text-white font-bold text-xl">
+            <div className="text-center bg-gray-100 dark:bg-gray-900/30 rounded-xl p-3 flex-1 border border-gray-200 dark:border-white/5 transition-transform hover:-translate-y-1">
+              <p className="text-gray-900 dark:text-white font-bold text-xl">
                 <CountUp end={JSON.parse(localStorage.getItem('habits') || '[]').length} />
               </p>
               <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mt-1">Habits</p>
@@ -302,14 +302,14 @@ function Dashboard({ setActiveTab, currentUser }) {
             <div
               key={stat.key}
               onClick={() => setActiveTab(stat.key)}
-              className="bg-[#050505] border border-gray-800/50 rounded-xl p-5 cursor-pointer hover:border-gray-700 hover:bg-[#0a0a0a] transition-all duration-300 shadow-sm flex flex-col gap-4 group relative overflow-hidden"
+              className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-xl p-5 cursor-pointer hover:border-gray-300 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-[#0a0a0a] transition-all duration-300 shadow-sm flex flex-col gap-4 group relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-900/50 border border-white/5 group-hover:bg-gray-800 transition-colors">
-                 <Icon size={20} className="text-cyan-400" strokeWidth={1.5} />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/5 dark:from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-white/5 group-hover:bg-gray-200 dark:group-hover:bg-gray-800 transition-colors">
+                 <Icon size={20} className="text-cyan-500 dark:text-cyan-400" strokeWidth={1.5} />
               </div>
               <div className="relative z-10">
-                <p className="font-semibold text-white tracking-wide">{stat.label}</p>
+                <p className="font-semibold text-gray-900 dark:text-white tracking-wide">{stat.label}</p>
                 <p className="text-sm text-gray-500">
                   {getCount(stat.key)} entries tracking
                 </p>
