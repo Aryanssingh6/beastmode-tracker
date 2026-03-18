@@ -1,5 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, AlertCircle, Github, GitCommit, FileCode2, Star } from 'lucide-react';
+import { AlertCircle, Github, GitCommit, FileCode2, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const CountUp = ({ end, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime;
+    let animationFrame;
+
+    const updateCount = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percentage = Math.min(progress / duration, 1);
+      
+      const easeOutQuart = 1 - Math.pow(1 - percentage, 4);
+      setCount(Math.floor(end * easeOutQuart));
+
+      if (percentage < 1) {
+        animationFrame = window.requestAnimationFrame(updateCount);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(updateCount);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [end, duration]);
+
+  return <>{count}</>;
+};
 
 function Development({ currentUser, darkMode }) {
   const [loading, setLoading] = useState(true);
@@ -88,9 +116,43 @@ function Development({ currentUser, darkMode }) {
 
   if (loading) {
     return (
-      <div className="flex flex-col flex-1 items-center justify-center p-12 text-gray-500 min-h-[400px]">
-        <Loader2 size={32} className="animate-spin mb-4" />
-        <p>Analyzing commit history...</p>
+      <div className="relative min-h-[400px] w-full mt-4">
+        {/* Skeleton Web Dev Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05] overflow-hidden z-0 rounded-2xl">
+           <div className="w-full h-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 animate-pulse" />
+        </div>
+        
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          {/* Skeleton Profile Stats */}
+          <div className="col-span-1 bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full bg-gray-800 mb-4"></div>
+            <div className="h-5 w-24 bg-gray-800 rounded mb-6"></div>
+            <div className="w-full grid grid-cols-2 gap-3">
+               <div className="h-16 bg-gray-800 rounded-lg"></div>
+               <div className="h-16 bg-gray-800 rounded-lg"></div>
+            </div>
+          </div>
+          {/* Skeleton Repositories */}
+          <div className="col-span-1 md:col-span-2 bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse">
+            <div className="h-6 w-40 bg-gray-800 rounded mb-6"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+               <div className="h-20 bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-800 rounded-lg"></div>
+               <div className="h-20 bg-gray-800 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Skeleton Timeline */}
+        <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse relative z-10">
+           <div className="h-6 w-48 bg-gray-800 rounded mb-6"></div>
+           <div className="space-y-6 pl-4 border-l border-gray-800">
+             <div className="h-4 w-3/4 bg-gray-800 rounded"></div>
+             <div className="h-4 w-1/2 bg-gray-800 rounded"></div>
+             <div className="h-4 w-2/3 bg-gray-800 rounded"></div>
+           </div>
+        </div>
       </div>
     );
   }
@@ -108,7 +170,12 @@ function Development({ currentUser, darkMode }) {
   }
 
   return (
-    <div className="relative min-h-[500px]">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="relative min-h-[500px]"
+    >
       {/* Web Dev / GitHub Thematic Background */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05] overflow-hidden z-0 rounded-2xl">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -141,12 +208,12 @@ function Development({ currentUser, darkMode }) {
           <p className="text-xs text-blue-400 font-medium mb-4">Web Developer</p>
           
           <div className="w-full grid grid-cols-2 gap-3 mt-2">
-            <div className="bg-[#1a1a1a] rounded-lg p-3 border border-gray-800 font-semibold text-gray-300">
-              <span className="block text-xl text-white">{stats?.public_repos}</span>
+            <div className="bg-[#1a1a1a] rounded-lg p-3 border border-gray-800 font-semibold text-gray-300 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <span className="block text-xl text-white"><CountUp end={stats?.public_repos || 0} /></span>
               <span className="text-[10px] text-gray-500 uppercase tracking-widest">Repos</span>
             </div>
-            <div className="bg-[#1a1a1a] rounded-lg p-3 border border-gray-800 font-semibold text-gray-300">
-              <span className="block text-xl text-white">{stats?.followers}</span>
+            <div className="bg-[#1a1a1a] rounded-lg p-3 border border-gray-800 font-semibold text-gray-300 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
+              <span className="block text-xl text-white"><CountUp end={stats?.followers || 0} /></span>
               <span className="text-[10px] text-gray-500 uppercase tracking-widest">Followers</span>
             </div>
           </div>
@@ -214,7 +281,7 @@ function Development({ currentUser, darkMode }) {
          </div>
       </div>
 
-    </div>
+    </motion.div>
   );
 }
 

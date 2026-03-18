@@ -1,8 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { Award, Loader2, AlertCircle, TerminalSquare } from 'lucide-react';
+import { Award, AlertCircle, TerminalSquare } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const COLORS = ['#22c55e', '#eab308', '#ef4444']; // Easy(Green), Medium(Yellow), Hard(Red)
+
+const CountUp = ({ end, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime;
+    let animationFrame;
+
+    const updateCount = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percentage = Math.min(progress / duration, 1);
+      
+      const easeOutQuart = 1 - Math.pow(1 - percentage, 4);
+      setCount(Math.floor(end * easeOutQuart));
+
+      if (percentage < 1) {
+        animationFrame = window.requestAnimationFrame(updateCount);
+      }
+    };
+
+    animationFrame = window.requestAnimationFrame(updateCount);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [end, duration]);
+
+  return <>{count}</>;
+};
 
 function ProblemSolving({ currentUser, darkMode }) {
   const [loading, setLoading] = useState(true);
@@ -112,9 +140,45 @@ function ProblemSolving({ currentUser, darkMode }) {
 
   if (loading) {
     return (
-      <div className="flex flex-col flex-1 items-center justify-center p-12 text-gray-500 min-h-[400px]">
-        <Loader2 size={32} className="animate-spin mb-4" />
-        <p>Fetching DSA logic matrices...</p>
+      <div className="relative min-h-[400px] w-full mt-4">
+        {/* Skeleton DSA Thematic Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07] overflow-hidden z-0 rounded-2xl">
+           <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 animate-pulse" />
+        </div>
+        
+        {/* Skeleton Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 mb-6">
+          {/* Skeleton Awards */}
+          <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse">
+            <div className="h-6 w-32 bg-gray-800 rounded mb-4"></div>
+            <div className="h-4 w-12 bg-gray-800 rounded mb-6"></div>
+            <div className="flex gap-4">
+              <div className="w-16 h-16 bg-gray-800 rounded-lg"></div>
+              <div className="w-16 h-16 bg-gray-800 rounded-lg"></div>
+              <div className="w-16 h-16 bg-gray-800 rounded-lg"></div>
+            </div>
+          </div>
+          {/* Skeleton Chart */}
+          <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse flex items-center justify-between">
+             <div className="w-32 h-32 bg-gray-800 rounded-full border-4 border-gray-700/50"></div>
+             <div className="flex-1 ml-6 space-y-4">
+               <div className="h-8 bg-gray-800 rounded"></div>
+               <div className="h-8 bg-gray-800 rounded"></div>
+               <div className="h-8 bg-gray-800 rounded"></div>
+             </div>
+          </div>
+        </div>
+        {/* Skeleton Bar Chart */}
+        <div className="bg-[#111111]/80 backdrop-blur-md rounded-xl p-6 border border-gray-800 shadow-sm animate-pulse relative z-10">
+           <div className="h-6 w-48 bg-gray-800 rounded mb-6"></div>
+           <div className="space-y-4">
+             <div className="h-3 w-3/4 bg-gray-800 rounded"></div>
+             <div className="h-3 w-1/2 bg-gray-800 rounded"></div>
+             <div className="h-3 w-2/3 bg-gray-800 rounded"></div>
+             <div className="h-3 w-1/3 bg-gray-800 rounded"></div>
+             <div className="h-3 w-4/5 bg-gray-800 rounded"></div>
+           </div>
+        </div>
       </div>
     );
   }
@@ -126,7 +190,12 @@ function ProblemSolving({ currentUser, darkMode }) {
   ] : [];
 
   return (
-    <div className="relative">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="relative"
+    >
       {/* DSA Thematic Background (Graph Nodes / Binary Overlay) */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.07] overflow-hidden z-0 rounded-2xl">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -215,23 +284,23 @@ function ProblemSolving({ currentUser, darkMode }) {
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-2xl font-bold text-white tracking-tight">{solvedData?.total}</span>
+                <span className="text-2xl font-bold text-white tracking-tight"><CountUp end={solvedData?.total || 0} /></span>
               </div>
             </div>
 
             <div className="flex-1 ml-6 space-y-4">
               <p className="text-xs text-center text-gray-400 font-semibold mb-2 shadow-sm uppercase tracking-wider">DSA</p>
-              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50">
+              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
                 <span className="text-green-500 text-sm font-semibold">Easy</span>
-                <span className="text-gray-300 font-bold text-sm">{solvedData?.easy}</span>
+                <span className="text-gray-300 font-bold text-sm"><CountUp end={solvedData?.easy || 0} /></span>
               </div>
-              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50">
+              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
                 <span className="text-yellow-500 text-sm font-semibold">Medium</span>
-                <span className="text-gray-300 font-bold text-sm">{solvedData?.medium}</span>
+                <span className="text-gray-300 font-bold text-sm"><CountUp end={solvedData?.medium || 0} /></span>
               </div>
-              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50">
+              <div className="bg-[#1a1a1a] rounded flex justify-between items-center px-3 py-1.5 border border-gray-800/50 transition-all hover:bg-[#202020] hover:scale-[1.02] cursor-default">
                 <span className="text-red-500 text-sm font-semibold">Hard</span>
-                <span className="text-gray-300 font-bold text-sm">{solvedData?.hard}</span>
+                <span className="text-gray-300 font-bold text-sm"><CountUp end={solvedData?.hard || 0} /></span>
               </div>
             </div>
           </div>
@@ -275,6 +344,7 @@ function ProblemSolving({ currentUser, darkMode }) {
                     key={`cell-${index}`} 
                     fill={index === 0 ? '#3b82f6' : '#60a5fa'} 
                     fillOpacity={maxOpacity(index, topicData.length)}
+                    className="hover:fill-cyan-400 transition-colors duration-300 cursor-pointer"
                   />
                 ))}
               </Bar>
@@ -282,7 +352,7 @@ function ProblemSolving({ currentUser, darkMode }) {
           </ResponsiveContainer>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
