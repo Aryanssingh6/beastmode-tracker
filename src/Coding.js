@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Code2, Plus, Trash2, Clock, BookMarked, Github } from 'lucide-react';
+import { Code2, Plus, Trash2, Clock, BookMarked, Github, TerminalSquare, GitBranch } from 'lucide-react';
 import { saveData, getData } from './firestore';
 import Heatmap from './Heatmap';
 import { addXP } from './App';
 import toast from 'react-hot-toast';
+import ProblemSolving from './ProblemSolving';
+import Development from './Development';
 
 function Coding({ currentUser }) {
   const [entries, setEntries] = useState([]);
@@ -15,6 +17,7 @@ function Coding({ currentUser }) {
 
   useEffect(() => {
     if (currentUser?.id) loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const loadData = async () => {
@@ -194,6 +197,8 @@ function Coding({ currentUser }) {
     return streak;
   };
 
+  const [activeSubTab, setActiveSubTab] = useState('timeTracker');
+
   const weeklyHours = getWeeklyHours();
   const weeklyProgress = Math.min(Math.round((weeklyHours / weeklyGoal) * 100), 100);
   const streak = getStreak();
@@ -202,15 +207,34 @@ function Coding({ currentUser }) {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 bg-blue-900/20 border border-blue-500/20 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.15)]">
           <Code2 size={24} className="text-cyan-400" strokeWidth={1.5} />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-white tracking-tight">Coding <span className="text-cyan-400">Tracker</span></h2>
-          <p className="text-gray-400 text-sm">{entries.length} sessions logged · Keep pushing forward</p>
+          <p className="text-gray-400 text-sm">Track your hours, DSA, and Web Dev progress</p>
         </div>
       </div>
+
+      {/* Modern Tabs */}
+      <div className="flex p-1 bg-[#050505] border border-gray-800 rounded-lg mb-8 w-fit shadow-xs">
+        <button 
+          onClick={() => setActiveSubTab('timeTracker')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'timeTracker' ? 'bg-[#1a1a1a] text-cyan-400 shadow-sm border border-gray-700/50' : 'text-gray-400 hover:text-gray-200'}`}
+        ><Clock size={16} /> Time Log</button>
+        <button 
+          onClick={() => setActiveSubTab('dsa')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'dsa' ? 'bg-[#1a1a1a] text-blue-400 shadow-sm border border-gray-700/50' : 'text-gray-400 hover:text-gray-200'}`}
+        ><TerminalSquare size={16} /> Problem Solving</button>
+        <button 
+          onClick={() => setActiveSubTab('dev')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'dev' ? 'bg-[#1a1a1a] text-purple-400 shadow-sm border border-gray-700/50' : 'text-gray-400 hover:text-gray-200'}`}
+        ><GitBranch size={16} /> Development</button>
+      </div>
+
+      {activeSubTab === 'timeTracker' && (
+        <div className="animate-in fade-in zoom-in-95 duration-300">
 
       {/* Stats Banner */}
       <div className="bg-[#050505] border border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm relative overflow-hidden group">
@@ -379,6 +403,20 @@ function Coding({ currentUser }) {
           ))}
         </div>
       </div>
+      </div>
+      )}
+
+      {activeSubTab === 'dsa' && (
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <ProblemSolving currentUser={currentUser} />
+        </div>
+      )}
+
+      {activeSubTab === 'dev' && (
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <Development currentUser={currentUser} />
+        </div>
+      )}
     </div>
   );
 }

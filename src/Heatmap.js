@@ -24,9 +24,15 @@ function Heatmap({ data = [], color = 'purple' }) {
 
   const getColor = (count) => {
     if (!count || count === 0) return 'bg-[#0a0a0a] border border-gray-800/50';
-    if (count === 1) return `bg-${color}-900/40 border border-${color}-800/50`;
-    if (count === 2) return `bg-${color}-800/60 border border-${color}-600/50`;
-    if (count >= 3) return `bg-${color}-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]`;
+    if (color === 'purple') {
+      if (count === 1) return 'bg-purple-900/40 border border-purple-800/50';
+      if (count === 2) return 'bg-purple-800/60 border border-purple-600/50';
+      if (count >= 3) return 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]';
+    }
+    // Fallback/Default for blue or others
+    if (count === 1) return 'bg-blue-900/40 border border-blue-800/50';
+    if (count === 2) return 'bg-blue-800/60 border border-blue-600/50';
+    if (count >= 3) return 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]';
     return 'bg-[#0a0a0a] border border-gray-800/50';
   };
 
@@ -55,9 +61,19 @@ function Heatmap({ data = [], color = 'purple' }) {
         <div className="flex items-center gap-2">
           <span className="text-gray-500 text-xs font-medium uppercase tracking-wider mr-1">Less</span>
           <div className="w-3 h-3 rounded-[3px] bg-[#0a0a0a] border border-gray-800/50" />
-          <div className={`w-3 h-3 rounded-[3px] bg-${color}-900/40 border border-${color}-800/50`} />
-          <div className={`w-3 h-3 rounded-[3px] bg-${color}-800/60 border border-${color}-600/50`} />
-          <div className={`w-3 h-3 rounded-[3px] bg-${color}-500 shadow-[0_0_5px_rgba(59,130,246,0.4)]`} />
+          {color === 'purple' ? (
+            <>
+              <div className="w-3 h-3 rounded-[3px] bg-purple-900/40 border border-purple-800/50" />
+              <div className="w-3 h-3 rounded-[3px] bg-purple-800/60 border border-purple-600/50" />
+              <div className="w-3 h-3 rounded-[3px] bg-purple-500 shadow-[0_0_5px_rgba(168,85,247,0.4)]" />
+            </>
+          ) : (
+            <>
+              <div className="w-3 h-3 rounded-[3px] bg-blue-900/40 border border-blue-800/50" />
+              <div className="w-3 h-3 rounded-[3px] bg-blue-800/60 border border-blue-600/50" />
+              <div className="w-3 h-3 rounded-[3px] bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.4)]" />
+            </>
+          )}
           <span className="text-gray-500 text-xs font-medium uppercase tracking-wider ml-1">More</span>
         </div>
       </div>
