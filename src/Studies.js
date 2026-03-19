@@ -106,20 +106,20 @@ function Studies({ currentUser }) {
           <BookOpen size={24} className="text-blue-400" strokeWidth={1.5} />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Studies <span className="text-blue-400">Tracker</span></h2>
-          <p className="text-gray-400 text-sm">{entries.length} sessions logged · Stay focused</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Studies <span className="text-blue-400">Tracker</span></h2>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">{entries.length} sessions logged · Stay focused</p>
         </div>
       </div>
 
       {/* Stats Banner */}
-      <div className="bg-[#050505] border border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm relative overflow-hidden group">
+      <div className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm relative overflow-hidden group">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         <div className="grid grid-cols-3 gap-4 relative z-10">
           <div className="text-center">
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">This Week</p>
+            <p className="text-gray-600 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">This Week</p>
             <div className="flex items-baseline justify-center gap-1">
-              <p className="text-white font-bold text-3xl">{weeklyHours.toFixed(1)}</p>
-              <p className="text-gray-400 text-sm font-medium">/ {weeklyGoal}h</p>
+              <p className="text-gray-900 dark:text-white font-bold text-3xl">{weeklyHours.toFixed(1)}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">/ {weeklyGoal}h</p>
             </div>
           </div>
           <div className="text-center border-x border-gray-800/50">
@@ -130,16 +130,16 @@ function Studies({ currentUser }) {
             </div>
           </div>
           <div className="text-center">
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Total</p>
+            <p className="text-gray-600 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Total</p>
             <div className="flex items-baseline justify-center gap-1">
-              <p className="text-white font-bold text-3xl">{totalHours.toFixed(0)}</p>
-              <p className="text-gray-400 text-sm font-medium">hrs</p>
+              <p className="text-gray-900 dark:text-white font-bold text-3xl">{totalHours.toFixed(0)}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">hrs</p>
             </div>
           </div>
         </div>
         <div className="mt-6 pt-4 border-t border-gray-800/50 relative z-10">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-gray-400 text-xs font-medium uppercase tracking-wider">Weekly Progress Goal</p>
+            <p className="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Weekly Progress Goal</p>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -149,7 +149,7 @@ function Studies({ currentUser }) {
                   setWeeklyGoal(val);
                   localStorage.setItem('goal_studies', val);
                 }}
-                className="w-12 bg-gray-900/50 border border-gray-700/50 rounded flex items-center justify-center text-xs text-center text-white focus:outline-none focus:ring-1 focus:ring-blue-500 py-1"
+                className="w-12 bg-gray-900/50 border border-gray-700/50 rounded flex items-center justify-center text-xs text-center text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500 py-1"
               />
               <p className="text-blue-400 text-xs font-bold w-8 text-right drop-shadow-[0_0_5px_rgba(59,130,246,0.2)]">{weeklyProgress}%</p>
             </div>
@@ -193,42 +193,42 @@ function Studies({ currentUser }) {
           {Object.entries(subjectStats).map(([name, stat]) => (
             <div key={name} className="bg-[#050505] rounded-2xl p-5 shadow-sm border border-gray-800/50 flex flex-col justify-center relative overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              <p className="font-medium text-gray-500 text-xs tracking-wider uppercase truncate mb-2 relative z-10">{name}</p>
+              <p className="font-medium text-gray-600 dark:text-gray-500 text-xs tracking-wider uppercase truncate mb-2 relative z-10">{name}</p>
               <div className="flex items-baseline gap-1 relative z-10">
-                <p className="text-white font-bold text-3xl">{stat.hours.toFixed(1)}</p>
+                <p className="text-gray-900 dark:text-white font-bold text-3xl">{stat.hours.toFixed(1)}</p>
                 <p className="text-blue-400 text-sm font-medium">h</p>
               </div>
-              <p className="text-gray-500 text-xs mt-1 relative z-10">{stat.sessions} sessions</p>
+              <p className="text-gray-600 dark:text-gray-500 text-xs mt-1 relative z-10">{stat.sessions} sessions</p>
             </div>
           ))}
         </div>
       )}
 
       {/* Form */}
-      <div className="bg-[#050505] border border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm">
+      <div className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm">
         <div className="flex items-center gap-2 mb-6">
           <BookMarked size={16} className="text-blue-400" />
-          <h3 className="font-semibold text-white text-sm tracking-wide">Log Study Session</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white text-sm tracking-wide">Log Study Session</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
           <div className="relative">
-            <GraduationCap size={16} className="absolute left-3 top-3 text-gray-500" />
+            <GraduationCap size={16} className="absolute left-3 top-3 text-gray-600 dark:text-gray-500" />
             <input
               type="text"
               placeholder="Subject (e.g. Mathematics)"
               value={subject}
               onChange={e => setSubject(e.target.value)}
-              className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+              className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             />
           </div>
           <div className="relative">
-            <Clock size={16} className="absolute left-3 top-3 text-gray-500" />
+            <Clock size={16} className="absolute left-3 top-3 text-gray-600 dark:text-gray-500" />
             <input
               type="number"
               placeholder="Duration in hours"
               value={duration}
               onChange={e => setDuration(e.target.value)}
-              className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+              className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             />
           </div>
           <input
@@ -236,7 +236,7 @@ function Studies({ currentUser }) {
             placeholder="Notes (optional)"
             value={note}
             onChange={e => setNote(e.target.value)}
-            className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+            className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
           />
         </div>
         <button
@@ -249,41 +249,41 @@ function Studies({ currentUser }) {
       </div>
 
       {/* Entries */}
-      <div className="bg-[#050505] border border-gray-800/50 rounded-2xl shadow-sm overflow-hidden mb-8">
+      <div className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl shadow-sm overflow-hidden mb-8">
         {loading && (
           <div className="p-8 text-center">
-            <p className="text-gray-400 font-medium text-sm">Loading...</p>
+            <p className="text-gray-600 dark:text-gray-400 font-medium text-sm">Loading...</p>
           </div>
         )}
         {!loading && entries.length === 0 && (
-          <div className="p-12 text-center text-gray-500">
+          <div className="p-12 text-center text-gray-600 dark:text-gray-500">
             <BookOpen size={32} className="mx-auto mb-3 opacity-50" />
             <p className="font-medium text-sm">No study sessions logged. Time to hit the books!</p>
           </div>
         )}
         <div className="divide-y divide-gray-800/50">
           {entries.map(entry => (
-            <div key={entry.id} className="p-5 flex items-center justify-between hover:bg-[#0a0a0a] transition-colors">
+            <div key={entry.id} className="p-5 flex items-center justify-between hover:bg-gray-50 dark:bg-[#0a0a0a] transition-colors">
               <div className="flex items-start gap-4">
                 <div className="mt-1 w-10 h-10 bg-blue-900/20 rounded-xl flex items-center justify-center shrink-0 border border-blue-500/10">
                   <BookOpen size={18} className="text-blue-400" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="font-semibold text-white text-md">{entry.subject}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white text-md">{entry.subject}</p>
                   <div className="flex items-center gap-3 mt-1">
-                    <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+                    <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400 text-sm">
                       <Clock size={14} />
                       <span>{entry.duration} hrs</span>
                     </div>
                     <span className="text-gray-700 px-1">•</span>
-                    <span className="text-gray-500 text-sm">{entry.date}</span>
+                    <span className="text-gray-600 dark:text-gray-500 text-sm">{entry.date}</span>
                   </div>
-                  {entry.note && <p className="text-gray-400 text-sm mt-3 bg-gray-900/50 px-3 py-2 rounded-lg inline-block border border-gray-800/50">{entry.note}</p>}
+                  {entry.note && <p className="text-gray-600 dark:text-gray-400 text-sm mt-3 bg-gray-900/50 px-3 py-2 rounded-lg inline-block border border-gray-800/50">{entry.note}</p>}
                 </div>
               </div>
               <button
                 onClick={() => deleteEntry(entry.id)}
-                className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-red-900/20 text-gray-500 border border-transparent hover:border-red-500/30 hover:text-red-400 transition-all"
+                className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-red-900/20 text-gray-600 dark:text-gray-500 border border-transparent hover:border-red-500/30 hover:text-red-400 transition-all"
               >
                 <Trash2 size={18} />
               </button>

@@ -84,8 +84,8 @@ function Analytics() {
           <BarChart2 size={24} className="text-indigo-500" strokeWidth={1.5} />
         </div>
         <div>
-          <h2 className="text-2xl font-black text-gray-900">Analytics</h2>
-          <p className="text-gray-400 text-sm">Last 7 days activity</p>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-white">Analytics</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">Last 7 days activity</p>
         </div>
       </div>
 
@@ -127,12 +127,13 @@ function Analytics() {
         ].map(card => {
           const Icon = card.icon;
           return (
-            <div key={card.label} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              <div className={`w-10 h-10 ${card.bg} rounded-xl flex items-center justify-center mb-3`}>
+            <div key={card.label} className="bg-white dark:bg-[#050505] rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-800/50 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className={`w-10 h-10 ${card.bg} rounded-xl flex items-center justify-center mb-3 relative z-10`}>
                 <Icon size={18} className={card.color} strokeWidth={1.5} />
               </div>
-              <p className={`text-2xl font-black ${card.color}`}>{card.value}</p>
-              <p className="text-gray-400 text-xs mt-1">{card.label} this week</p>
+              <p className={`text-2xl font-black ${card.color} relative z-10`}>{card.value}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-xs mt-1 relative z-10">{card.label} this week</p>
             </div>
           );
         })}
@@ -146,8 +147,8 @@ function Analytics() {
             onClick={() => setActiveChart(c.id)}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all
               ${activeChart === c.id
-                ? 'bg-gray-900 text-white'
-                : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-200'}`}
+                ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+                : 'bg-white dark:bg-[#0a0a0a] text-gray-500 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800'}`}
           >
             {c.label}
           </button>
@@ -155,10 +156,10 @@ function Analytics() {
       </div>
 
       {/* Charts */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-[#050505] rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800/50">
         {activeChart === 'coding' && (
           <>
-            <h3 className="font-bold text-gray-800 mb-4">Coding Hours — Last 7 Days</h3>
+            <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Coding Hours — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getCodingData()}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -173,7 +174,7 @@ function Analytics() {
 
         {activeChart === 'studies' && (
           <>
-            <h3 className="font-bold text-gray-800 mb-4">Study Hours — Last 7 Days</h3>
+            <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Study Hours — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getStudiesData()}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -188,7 +189,7 @@ function Analytics() {
 
         {activeChart === 'fitness' && (
           <>
-            <h3 className="font-bold text-gray-800 mb-4">Workout Sessions — Last 7 Days</h3>
+            <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Workout Sessions — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getFitnessData()}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -203,7 +204,7 @@ function Analytics() {
 
         {activeChart === 'habits' && (
           <>
-            <h3 className="font-bold text-gray-800 mb-4">Habits Completed — Last 7 Days</h3>
+            <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Habits Completed — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getHabitsData()}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -218,7 +219,7 @@ function Analytics() {
 
         {activeChart === 'overall' && (
           <>
-            <h3 className="font-bold text-gray-800 mb-4">Overall Activity — Last 7 Days</h3>
+            <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Overall Activity — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={getOverallData()}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />

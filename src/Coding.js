@@ -212,24 +212,24 @@ function Coding({ currentUser }) {
           <Code2 size={24} className="text-cyan-400" strokeWidth={1.5} />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Coding <span className="text-cyan-400">Tracker</span></h2>
-          <p className="text-gray-400 text-sm">Track your hours, DSA, and Web Dev progress</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Coding <span className="text-cyan-400">Tracker</span></h2>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">Track your hours, DSA, and Web Dev progress</p>
         </div>
       </div>
 
       {/* Modern Tabs */}
-      <div className="flex p-1 bg-[#050505] border border-gray-800 rounded-lg mb-8 w-fit shadow-xs">
+      <div className="flex p-1 bg-[#050505] border border-gray-200 dark:border-gray-800 rounded-lg mb-8 w-fit shadow-xs">
         <button 
           onClick={() => setActiveSubTab('timeTracker')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'timeTracker' ? 'bg-[#1a1a1a] text-cyan-400 shadow-sm border border-gray-700/50' : 'text-gray-400 hover:text-gray-200'}`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'timeTracker' ? 'bg-gray-100 dark:bg-[#1a1a1a] text-cyan-400 shadow-sm border border-gray-700/50' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
         ><Clock size={16} /> Time Log</button>
         <button 
           onClick={() => setActiveSubTab('dsa')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'dsa' ? 'bg-[#1a1a1a] text-blue-400 shadow-sm border border-gray-700/50' : 'text-gray-400 hover:text-gray-200'}`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'dsa' ? 'bg-gray-100 dark:bg-[#1a1a1a] text-blue-400 shadow-sm border border-gray-700/50' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
         ><TerminalSquare size={16} /> Problem Solving</button>
         <button 
           onClick={() => setActiveSubTab('dev')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'dev' ? 'bg-[#1a1a1a] text-purple-400 shadow-sm border border-gray-700/50' : 'text-gray-400 hover:text-gray-200'}`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'dev' ? 'bg-gray-100 dark:bg-[#1a1a1a] text-purple-400 shadow-sm border border-gray-700/50' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
         ><GitBranch size={16} /> Development</button>
       </div>
 
@@ -237,14 +237,14 @@ function Coding({ currentUser }) {
         <div className="animate-in fade-in zoom-in-95 duration-300">
 
       {/* Stats Banner */}
-      <div className="bg-[#050505] border border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm relative overflow-hidden group">
+      <div className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm relative overflow-hidden group">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         <div className="grid grid-cols-3 gap-4 relative z-10">
           <div className="text-center">
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">This Week</p>
+            <p className="text-gray-600 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">This Week</p>
             <div className="flex items-baseline justify-center gap-1">
-              <p className="text-white font-bold text-3xl">{weeklyHours.toFixed(1)}</p>
-              <p className="text-gray-400 text-sm font-medium">/ {weeklyGoal}h</p>
+              <p className="text-gray-900 dark:text-white font-bold text-3xl">{weeklyHours.toFixed(1)}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">/ {weeklyGoal}h</p>
             </div>
           </div>
           <div className="text-center border-x border-gray-800/50">
@@ -255,16 +255,16 @@ function Coding({ currentUser }) {
             </div>
           </div>
           <div className="text-center">
-            <p className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Total</p>
+            <p className="text-gray-600 dark:text-gray-500 text-xs font-semibold uppercase tracking-wider mb-1">Total</p>
             <div className="flex items-baseline justify-center gap-1">
-              <p className="text-white font-bold text-3xl">{totalHours.toFixed(0)}</p>
-              <p className="text-gray-400 text-sm font-medium">hrs</p>
+              <p className="text-gray-900 dark:text-white font-bold text-3xl">{totalHours.toFixed(0)}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">hrs</p>
             </div>
           </div>
         </div>
         <div className="mt-6 pt-4 border-t border-gray-800/50 relative z-10">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-gray-400 text-xs font-medium uppercase tracking-wider">Weekly Progress Goal</p>
+            <p className="text-gray-600 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">Weekly Progress Goal</p>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -274,7 +274,7 @@ function Coding({ currentUser }) {
                   setWeeklyGoal(val);
                   localStorage.setItem('goal_coding', val);
                 }}
-                className="w-12 bg-gray-900/50 border border-gray-700/50 rounded flex items-center justify-center text-xs text-center text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 py-1"
+                className="w-12 bg-gray-900/50 border border-gray-700/50 rounded flex items-center justify-center text-xs text-center text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 py-1"
               />
               <p className="text-cyan-400 text-xs font-bold w-8 text-right drop-shadow-[0_0_5px_rgba(34,211,238,0.2)]">{weeklyProgress}%</p>
             </div>
@@ -298,30 +298,30 @@ function Coding({ currentUser }) {
       </div>
 
       {/* Form */}
-      <div className="bg-[#050505] border border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm">
+      <div className="bg-white dark:bg-[#050505] border border-gray-200 dark:border-gray-800/50 rounded-2xl p-6 mb-8 shadow-sm">
         <div className="flex items-center gap-2 mb-6">
           <BookMarked size={16} className="text-cyan-400" />
-          <h3 className="font-semibold text-white text-sm tracking-wide">Log New Session</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white text-sm tracking-wide">Log New Session</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
           <div className="relative">
-            <Code2 size={16} className="absolute left-3 top-3 text-gray-500" />
+            <Code2 size={16} className="absolute left-3 top-3 text-gray-600 dark:text-gray-500" />
             <input
               type="text"
               placeholder="Topic (e.g. React Hooks)"
               value={topic}
               onChange={e => setTopic(e.target.value)}
-              className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+              className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             />
           </div>
           <div className="relative">
-            <Clock size={16} className="absolute left-3 top-3 text-gray-500" />
+            <Clock size={16} className="absolute left-3 top-3 text-gray-600 dark:text-gray-500" />
             <input
               type="number"
               placeholder="Duration in hours"
               value={duration}
               onChange={e => setDuration(e.target.value)}
-              className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+              className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             />
           </div>
           <input
@@ -329,7 +329,7 @@ function Coding({ currentUser }) {
             placeholder="Notes (optional)"
             value={note}
             onChange={e => setNote(e.target.value)}
-            className="w-full bg-[#0a0a0a] text-white placeholder-gray-500 border border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+            className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
           />
         </div>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
@@ -363,11 +363,11 @@ function Coding({ currentUser }) {
       <div className="bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm overflow-hidden">
         {loading && (
           <div className="p-8 text-center">
-            <p className="text-gray-400 font-medium text-sm">Loading...</p>
+            <p className="text-gray-600 dark:text-gray-400 font-medium text-sm">Loading...</p>
           </div>
         )}
         {!loading && entries.length === 0 && (
-          <div className="p-12 text-center text-gray-400">
+          <div className="p-12 text-center text-gray-600 dark:text-gray-400">
             <Code2 size={32} className="mx-auto mb-3 opacity-50" />
             <p className="font-medium text-sm">No sessions yet. Start coding!</p>
           </div>
@@ -382,19 +382,19 @@ function Coding({ currentUser }) {
                 <div>
                   <p className="font-semibold text-gray-900 dark:text-white text-sm">{entry.topic}</p>
                   <div className="flex items-center gap-3 mt-1">
-                    <div className="flex items-center gap-1.5 text-gray-500 text-xs">
+                    <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-500 text-xs">
                       <Clock size={12} />
                       <span>{entry.duration} hrs</span>
                     </div>
                     <span className="text-gray-300 dark:text-gray-600">•</span>
-                    <span className="text-gray-500 text-xs">{entry.date}</span>
+                    <span className="text-gray-600 dark:text-gray-500 text-xs">{entry.date}</span>
                   </div>
                   {entry.note && <p className="text-gray-600 dark:text-gray-400 text-xs mt-2">{entry.note}</p>}
                 </div>
               </div>
               <button
                 onClick={() => deleteEntry(entry.id)}
-                className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 transition-colors"
+                className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"
                 title="Delete entry"
               >
                 <Trash2 size={16} />

@@ -77,51 +77,52 @@ function Goals() {
           <Target size={24} className="text-purple-500" strokeWidth={1.5} />
         </div>
         <div>
-          <h2 className="text-2xl font-black text-gray-900">Goals</h2>
-          <p className="text-gray-400 text-sm">{goals.length} active goals</p>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-white">Goals</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">{goals.length} active goals</p>
         </div>
       </div>
 
       {/* Add Goal */}
-      <div className="bg-white rounded-2xl p-6 mb-6 shadow-sm border border-gray-100">
-        <h3 className="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wide">Set New Goal</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="bg-white dark:bg-[#050505] rounded-2xl p-6 mb-6 shadow-sm border border-gray-200 dark:border-gray-800/50 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <h3 className="font-bold text-gray-700 dark:text-gray-300 mb-4 text-sm uppercase tracking-wide relative z-10">Set New Goal</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 relative z-10">
           <input
             type="text"
             placeholder="Goal title (e.g. Learn React)"
             value={newGoal.title}
             onChange={e => setNewGoal({ ...newGoal, title: e.target.value })}
-            className="bg-gray-50 text-gray-800 placeholder-gray-400 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
+            className="bg-gray-50 dark:bg-[#0a0a0a] text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
           />
           <input
             type="number"
             placeholder="Target sessions (e.g. 20)"
             value={newGoal.target}
             onChange={e => setNewGoal({ ...newGoal, target: e.target.value })}
-            className="bg-gray-50 text-gray-800 placeholder-gray-400 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
+            className="bg-gray-50 dark:bg-[#0a0a0a] text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
           />
           <select
             value={newGoal.category}
             onChange={e => setNewGoal({ ...newGoal, category: e.target.value })}
-            className="bg-gray-50 text-gray-800 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
+            className="bg-gray-50 dark:bg-[#0a0a0a] text-gray-800 dark:text-gray-200 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
           >
             {categories.map(c => (
               <option key={c.id} value={c.id}>{c.label}</option>
             ))}
           </select>
           <div className="relative">
-            <Calendar size={16} className="absolute left-3 top-3.5 text-gray-400" />
+            <Calendar size={16} className="absolute left-3 top-3.5 text-gray-500 dark:text-gray-400" />
             <input
               type="date"
               value={newGoal.deadline}
               onChange={e => setNewGoal({ ...newGoal, deadline: e.target.value })}
-              className="w-full bg-gray-50 text-gray-800 border border-gray-200 rounded-xl pl-9 pr-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
+              className="w-full bg-gray-50 dark:bg-[#0a0a0a] text-gray-800 dark:text-gray-200 border border-gray-200 rounded-xl pl-9 pr-4 py-3 text-sm focus:outline-none focus:border-purple-400 transition-all"
             />
           </div>
         </div>
         <button
           onClick={addGoal}
-          className="flex items-center gap-2 bg-gray-900 hover:bg-purple-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all"
+          className="flex items-center gap-2 bg-gray-900 dark:bg-white hover:bg-purple-600 dark:hover:bg-gray-200 text-white dark:text-gray-900 font-bold px-6 py-3 rounded-xl text-sm transition-all"
         >
           <Plus size={16} />
           Add Goal
@@ -131,9 +132,9 @@ function Goals() {
       {/* Goals List */}
       <div className="space-y-4">
         {goals.length === 0 && (
-          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
-            <Target size={40} className="text-gray-200 mx-auto mb-3" />
-            <p className="text-gray-400 font-medium">No goals yet. Set your first goal!</p>
+          <div className="bg-white dark:bg-[#050505] rounded-2xl p-12 text-center border border-gray-200 dark:border-gray-800/50">
+            <Target size={40} className="text-gray-300 dark:text-gray-700 mx-auto mb-3" />
+            <p className="text-gray-500 dark:text-gray-400 font-medium">No goals yet. Set your first goal!</p>
           </div>
         )}
         {goals.map(goal => {
@@ -144,16 +145,17 @@ function Goals() {
           const daysLeft = getDaysLeft(goal.deadline);
 
           return (
-            <div key={goal.id} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between mb-4">
+            <div key={goal.id} className="bg-white dark:bg-[#050505] rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800/50 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="flex items-center justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 ${cat?.bg} rounded-xl flex items-center justify-center`}>
                     <Icon size={18} className={cat?.color} strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-800">{goal.title}</p>
+                    <p className="font-bold text-gray-800 dark:text-gray-200">{goal.title}</p>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <p className="text-gray-400 text-xs">{cat?.label} · Set on {goal.createdAt}</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs">{cat?.label} · Set on {goal.createdAt}</p>
                       {daysLeft !== null && (
                         <p className={`text-xs font-bold ${getDaysColor(daysLeft)}`}>
                           {daysLeft < 0 ? 'Overdue!' : daysLeft === 0 ? 'Due Today!' : `${daysLeft} days left`}
@@ -164,8 +166,8 @@ function Goals() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
-                    <p className="font-black text-gray-900 text-lg">{current}/{goal.target}</p>
-                    <p className="text-gray-400 text-xs">sessions</p>
+                    <p className="font-black text-gray-900 dark:text-white text-lg">{current}/{goal.target}</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">sessions</p>
                   </div>
                   <button
                     onClick={() => deleteGoal(goal.id)}
@@ -177,14 +179,14 @@ function Goals() {
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full bg-gray-100 rounded-full h-3 mb-2">
+              <div className="w-full bg-gray-100 dark:bg-gray-800/50 rounded-full h-3 mb-2 relative z-10">
                 <div
-                  className={`${getProgressColor(progress)} h-3 rounded-full transition-all duration-700`}
+                  className={`${getProgressColor(progress)} h-3 rounded-full transition-all duration-700 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]`}
                   style={{ width: `${progress}%` }}
                 />
               </div>
               <div className="flex justify-between items-center">
-                <p className="text-xs text-gray-400">{progress}% complete</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{progress}% complete</p>
                 {progress >= 100 && (
                   <p className="text-xs text-green-500 font-bold">🎉 Goal Achieved!</p>
                 )}
