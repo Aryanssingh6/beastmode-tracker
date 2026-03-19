@@ -218,7 +218,7 @@ function Coding({ currentUser }) {
       </div>
 
       {/* Modern Tabs */}
-      <div className="flex p-1 bg-[#050505] border border-gray-200 dark:border-gray-800 rounded-lg mb-8 w-fit shadow-xs">
+      <div className="flex p-1 bg-gray-100 dark:bg-[#050505] border border-gray-200 dark:border-gray-800 rounded-lg mb-8 w-fit shadow-xs">
         <button 
           onClick={() => setActiveSubTab('timeTracker')}
           className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${activeSubTab === 'timeTracker' ? 'bg-gray-100 dark:bg-[#1a1a1a] text-cyan-400 shadow-sm border border-gray-700/50' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}

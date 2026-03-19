@@ -43,7 +43,7 @@ const quotes = [
   { text: "Great things never come from comfort zones.", author: "Unknown" },
 ];
 
-function Dashboard({ setActiveTab, currentUser }) {
+function Dashboard({ setActiveTab, currentUser, darkMode }) {
   const [quote, setQuote] = useState(quotes[0]);
   const [greeting, setGreeting] = useState('');
   const [todaySummary, setTodaySummary] = useState({});
@@ -120,14 +120,14 @@ function Dashboard({ setActiveTab, currentUser }) {
           </span>
         </div>
         
-        <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
-          <span className="text-gray-100">{greeting},</span> <br/>
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-4">
+          <span className={darkMode ? 'text-gray-100' : 'text-gray-800'}>{greeting},</span> <br/>
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             {currentUser?.name?.split(' ')[0]}
           </span>
         </h2>
         
-        <p className="text-gray-400 text-lg max-w-lg">
+        <p className={`text-lg max-w-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           {totalToday === 0
             ? "You haven't logged anything today. Time to activate Beast Mode."
             : `You've logged ${totalToday} activities today. Exceptional work.`}

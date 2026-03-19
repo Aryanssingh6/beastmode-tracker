@@ -5,7 +5,7 @@ import {
 } from 'recharts';
 import { TrendingUp, BarChart2, Activity } from 'lucide-react';
 
-function Analytics() {
+function Analytics({ darkMode }) {
   const [activeChart, setActiveChart] = useState('coding');
 
   const getLast7Days = () => {
@@ -80,8 +80,8 @@ function Analytics() {
     <div>
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center">
-          <BarChart2 size={24} className="text-indigo-500" strokeWidth={1.5} />
+        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${darkMode ? 'bg-indigo-900/30 border border-indigo-500/20' : 'bg-indigo-100'}`}>
+          <BarChart2 size={24} className={darkMode ? 'text-indigo-400' : 'text-indigo-500'} strokeWidth={1.5} />
         </div>
         <div>
           <h2 className="text-2xl font-black text-gray-900 dark:text-white">Analytics</h2>
@@ -162,7 +162,7 @@ function Analytics() {
             <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Coding Hours — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getCodingData()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#1f2937' : '#f3f4f6'} />
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -177,7 +177,7 @@ function Analytics() {
             <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Study Hours — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getStudiesData()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#1f2937' : '#f3f4f6'} />
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -192,7 +192,7 @@ function Analytics() {
             <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Workout Sessions — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getFitnessData()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#1f2937' : '#f3f4f6'} />
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -207,7 +207,7 @@ function Analytics() {
             <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Habits Completed — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={getHabitsData()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#1f2937' : '#f3f4f6'} />
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
@@ -222,7 +222,7 @@ function Analytics() {
             <h3 className="font-bold text-gray-800 dark:text-gray-200 mb-4">Overall Activity — Last 7 Days</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={getOverallData()}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#1f2937' : '#f3f4f6'} />
                 <XAxis dataKey="day" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
