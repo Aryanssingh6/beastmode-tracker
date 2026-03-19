@@ -15,7 +15,7 @@ import Analytics from './Analytics';
 import AICoach from './AICoach';
 import Pomodoro from './Pomodoro';
 import Notifications from './Notifications';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Home, Code2, BookOpen, Flame, Dumbbell, LogOut, Target, User, Menu, X, BarChart2, Sun, Moon } from 'lucide-react';
 
 const slideVariants = {

@@ -99,7 +99,6 @@ function Fitness({ currentUser }) {
   const streak = getStreak();
   const latestWeight = weights[0]?.weight || null;
   const firstWeight = weights[weights.length - 1]?.weight || null;
-  const weightChange = latestWeight && firstWeight ? (latestWeight - firstWeight).toFixed(1) : null;
 
   return (
     <div>

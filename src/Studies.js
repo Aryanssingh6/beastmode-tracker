@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Plus, Trash2, Clock, GraduationCap, AlertTriangle, Flame, BookMarked } from 'lucide-react';
+import { BookOpen, Plus, Trash2, Clock, GraduationCap, AlertTriangle, BookMarked } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { saveData, getData } from './firestore';
 import Heatmap from './Heatmap';
